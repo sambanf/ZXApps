@@ -1,0 +1,239 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+}
+<h2>@ViewBag.Title</h2>
+<h3>@ViewBag.Message</h3>
+
+<link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+<input type="hidden" id="dailypk" />
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-6">
+            <label>Pilih Tanggal</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <input id="datetrans" type="date" class="form-control" />
+        </div>
+        <div class="col-md-3">
+            <input type="button" class="btn btn-default" onclick="ondatechange()" value="Pilih" />
+        </div>
+    </div>
+</div>
+
+<div id="mainview" hidden>
+    <div>
+        <h2 id="dateview"></h2>
+    </div>
+
+    <button class="btn btn-success" onclick="btnaddclick()">Tambah Transaksi</button>
+    <hr />
+    <table class="table" id="maintable">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Kode Mesin</th>
+                <th>Status Mesin</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="maintablebody">
+        </tbody>
+    </table>
+
+</div>
+
+@* Modal Add Transaksi *@
+<div class="modal fade" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Create</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@* Will be moved to single js file later *@
+
+
+@section scripts{
+    <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        Date.prototype.toDateInputValue = (function () {
+            var local = new Date(this);
+            local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+            return local.toJSON().slice(0, 10);
+        });
+        $(document).ready(function () {
+            $('#datetrans').val(new Date().toDateInputValue());
+            ondatechange();
+        });
+        function ondatechange() {
+            document.getElementById("mainview").style.display = "block";
+            var data = { date: $("#datetrans").val() }
+            $.ajax({
+                url: '@Url.Action("Create", "Dashboard")',
+                type: 'POST',
+                data: data,
+                success: function (result) {
+                    $('#dailypk').val(result.data)
+                    $('#maintable').DataTable().clear().destroy();
+                    dataTable =  $("#maintable").DataTable({
+                    "ajax": {
+                            "url": "/Dashboard/GetData",
+                            "type": "GET",
+                            "data":data,
+                            "datatype": "json"
+                    },
+                    "columns": [
+                        { "data": "Mesin_PK" },
+                        { "data": "KodeMesin" },
+                        { "data": "StatusMesin" },
+                        {
+                            "data":"Mesin_PK" , "render" : function (data) {
+                            return "<a class='btn btn-default btn-sm' onclick=ChangePage('@Url.Action("MainPage","TransDetail")/" + data + "')><i class='fa fa-pencil'></i> Tambah Pekerja</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i> Delete</a>";
+                        },
+                            "orderable": false,
+                            "searchable":false,
+                            "width":"150px"
+                        }
+
+                    ],
+                    "language": {
+
+                        "emptyTable" : "No data found, Please click on <b>Add New</b> Button"
+                    }
+                });
+                },
+                error: function (err) {
+                    alert(err);
+                }
+            });
+
+
+            var d = new Date();
+            var days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+            var hari = days[d.getDay()] + " - " + $("#datetrans").val();
+            $("#dateview").html(hari);
+        }
+        function btnaddclick() {
+
+                    $.ajax({
+                        url: '@Url.Action("Create","Transaksi")',
+                        type: 'get',
+                        data: { x: $("#dailypk").val() },
+                        success: function (result) {
+                            $(".modal-title").html("Tambah Transaksi")
+                            $(".modal-body").html(result);
+                            $(".modal").modal("show");
+                            $("#mesin").select2({
+                                width: '80%'
+                            });
+                            $("#kodewarna").select2({
+                                width: '80%'
+                            });
+                            
+                            $('#daily').val($("#datetrans").val());
+                        },
+                        error: function (err) {
+                            alert(err);
+                        }
+                    });
+        }
+
+        function PopupForm(url) {
+            var formDiv = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+                    formDiv.html(response);
+                    Popup = formDiv.dialog({
+                        autoOpen: true,
+                        resizable: false,
+                        title: 'Fill Transaction Details',
+                        height: 350,
+                        width: 700,
+                        close: function () {
+                            Popup.dialog('destroy').remove();
+                        }
+
+                    });
+
+                });
+
+        }
+
+
+        function Delete(id) {
+            if (confirm('Are You Sure to Delete this Transaction Record ?')) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete","Transaksi")/' + id,
+                    success: function (data) {
+                        if (data.success) {
+                            dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+
+                        }
+                    }
+
+                });
+            }
+        }
+        function SubmitForm(form) {
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            Popup.dialog('close');
+                            dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+        function createtrans() {
+            var data = { mesin: $("#mesin").val(), daily: $("#datetrans").val(), kodewarna: $("#kodewarna").val() }
+         $.ajax({
+                    url: '@Url.Action("Create", "Transaksi")',
+                    type: 'POST',
+                    data: data,
+                    success: function (result) {
+                        if (result.success) {
+                            ondatechange();
+                        }
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                });
+        }
+
+
+        function ChangePage(x) {
+            window.location.href = x;
+        }
+    </script>
+}

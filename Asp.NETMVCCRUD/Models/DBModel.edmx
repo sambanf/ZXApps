@@ -1,0 +1,325 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="HELLOWModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'HELLOW.dbo.am_Status' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="am_Status">
+          <Key>
+            <PropertyRef Name="Status_PK" />
+            <PropertyRef Name="Title" />
+          </Key>
+          <Property Name="Status_PK" Type="int" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="tm_KodeWarna">
+          <Key>
+            <PropertyRef Name="KodeWarna_PK" />
+          </Key>
+          <Property Name="KodeWarna_PK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KodeWarna" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Pick" Type="int" Nullable="false" />
+          <Property Name="Status_FK" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tm_Mesin">
+          <Key>
+            <PropertyRef Name="Mesin_PK" />
+          </Key>
+          <Property Name="Mesin_PK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KodeMesin" Type="int" Nullable="false" />
+          <Property Name="StatusMesin_FK" Type="int" Nullable="false" />
+          <Property Name="Status_FK" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tm_Operator">
+          <Key>
+            <PropertyRef Name="Operator_PK" />
+          </Key>
+          <Property Name="Operator_PK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NoOperator" Type="int" />
+          <Property Name="NIP" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Nama" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Status_FK" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tm_StatusMesin">
+          <Key>
+            <PropertyRef Name="StatusMesin_PK" />
+          </Key>
+          <Property Name="StatusMesin_PK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Nilai" Type="float" Nullable="false" />
+          <Property Name="Status_FK" Type="int" />
+        </EntityType>
+        <EntityType Name="tt_Daily">
+          <Key>
+            <PropertyRef Name="Daily_PK" />
+          </Key>
+          <Property Name="Daily_PK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Status_FK" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tt_Transaction">
+          <Key>
+            <PropertyRef Name="Transaction_PK" />
+          </Key>
+          <Property Name="Transaction_PK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Daily_FK" Type="int" Nullable="false" />
+          <Property Name="Mesin_FK" Type="int" Nullable="false" />
+          <Property Name="Status_FK" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tt_TransactionDetail">
+          <Key>
+            <PropertyRef Name="TransactionDetail_PK" />
+          </Key>
+          <Property Name="TransactionDetail_PK" Type="int" Nullable="false" />
+          <Property Name="Transaction_FK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KodeWarna_FK" Type="int" Nullable="false" />
+          <Property Name="Operator_FK" Type="int" Nullable="false" />
+          <Property Name="HasilKain" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="HELLOWModelStoreContainer">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tm_KodeWarna" EntityType="Self.tm_KodeWarna" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tm_Mesin" EntityType="Self.tm_Mesin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tm_Operator" EntityType="Self.tm_Operator" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tm_StatusMesin" EntityType="Self.tm_StatusMesin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tt_Daily" EntityType="Self.tt_Daily" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tt_Transaction" EntityType="Self.tt_Transaction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tt_TransactionDetail" EntityType="Self.tt_TransactionDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="am_Status" EntityType="Self.am_Status" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [am_Status].[Status_PK] AS [Status_PK], 
+    [am_Status].[Title] AS [Title]
+    FROM [dbo].[am_Status] AS [am_Status]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HELLOWModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="tm_KodeWarna">
+          <Key>
+            <PropertyRef Name="KodeWarna_PK" />
+          </Key>
+          <Property Name="KodeWarna_PK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KodeWarna" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Pick" Type="Int32" Nullable="false" />
+          <Property Name="Status_FK" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tm_Mesin">
+          <Key>
+            <PropertyRef Name="Mesin_PK" />
+          </Key>
+          <Property Name="Mesin_PK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KodeMesin" Type="Int32" Nullable="false" />
+          <Property Name="StatusMesin_FK" Type="Int32" Nullable="false" />
+          <Property Name="Status_FK" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tm_Operator">
+          <Key>
+            <PropertyRef Name="Operator_PK" />
+          </Key>
+          <Property Name="Operator_PK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NoOperator" Type="Int32" />
+          <Property Name="NIP" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nama" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Status_FK" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tm_StatusMesin">
+          <Key>
+            <PropertyRef Name="StatusMesin_PK" />
+          </Key>
+          <Property Name="StatusMesin_PK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nilai" Type="Double" Nullable="false" />
+          <Property Name="Status_FK" Type="Int32" />
+        </EntityType>
+        <EntityType Name="tt_Daily">
+          <Key>
+            <PropertyRef Name="Daily_PK" />
+          </Key>
+          <Property Name="Daily_PK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Status_FK" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tt_Transaction">
+          <Key>
+            <PropertyRef Name="Transaction_PK" />
+          </Key>
+          <Property Name="Transaction_PK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Daily_FK" Type="Int32" Nullable="false" />
+          <Property Name="Mesin_FK" Type="Int32" Nullable="false" />
+          <Property Name="Status_FK" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tt_TransactionDetail">
+          <Key>
+            <PropertyRef Name="TransactionDetail_PK" />
+          </Key>
+          <Property Name="TransactionDetail_PK" Type="Int32" Nullable="false" />
+          <Property Name="Transaction_FK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KodeWarna_FK" Type="Int32" Nullable="false" />
+          <Property Name="Operator_FK" Type="Int32" Nullable="false" />
+          <Property Name="HasilKain" Type="Double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="am_Status">
+          <Key>
+            <PropertyRef Name="Status_PK" />
+            <PropertyRef Name="Title" />
+          </Key>
+          <Property Name="Status_PK" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="HELLOWEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="tm_KodeWarna" EntityType="Self.tm_KodeWarna" />
+          <EntitySet Name="tm_Mesin" EntityType="Self.tm_Mesin" />
+          <EntitySet Name="tm_Operator" EntityType="Self.tm_Operator" />
+          <EntitySet Name="tm_StatusMesin" EntityType="Self.tm_StatusMesin" />
+          <EntitySet Name="tt_Daily" EntityType="Self.tt_Daily" />
+          <EntitySet Name="tt_Transaction" EntityType="Self.tt_Transaction" />
+          <EntitySet Name="tt_TransactionDetail" EntityType="Self.tt_TransactionDetail" />
+          <EntitySet Name="am_Status" EntityType="Self.am_Status" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HELLOWModelStoreContainer" CdmEntityContainer="HELLOWEntities">
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="HELLOWModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tm_KodeWarna">
+            <EntityTypeMapping TypeName="HELLOWModel.tm_KodeWarna">
+              <MappingFragment StoreEntitySet="tm_KodeWarna">
+                <ScalarProperty Name="KodeWarna_PK" ColumnName="KodeWarna_PK" />
+                <ScalarProperty Name="KodeWarna" ColumnName="KodeWarna" />
+                <ScalarProperty Name="Pick" ColumnName="Pick" />
+                <ScalarProperty Name="Status_FK" ColumnName="Status_FK" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tm_Mesin">
+            <EntityTypeMapping TypeName="HELLOWModel.tm_Mesin">
+              <MappingFragment StoreEntitySet="tm_Mesin">
+                <ScalarProperty Name="Mesin_PK" ColumnName="Mesin_PK" />
+                <ScalarProperty Name="KodeMesin" ColumnName="KodeMesin" />
+                <ScalarProperty Name="StatusMesin_FK" ColumnName="StatusMesin_FK" />
+                <ScalarProperty Name="Status_FK" ColumnName="Status_FK" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tm_Operator">
+            <EntityTypeMapping TypeName="HELLOWModel.tm_Operator">
+              <MappingFragment StoreEntitySet="tm_Operator">
+                <ScalarProperty Name="Operator_PK" ColumnName="Operator_PK" />
+                <ScalarProperty Name="NoOperator" ColumnName="NoOperator" />
+                <ScalarProperty Name="NIP" ColumnName="NIP" />
+                <ScalarProperty Name="Nama" ColumnName="Nama" />
+                <ScalarProperty Name="Status_FK" ColumnName="Status_FK" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tm_StatusMesin">
+            <EntityTypeMapping TypeName="HELLOWModel.tm_StatusMesin">
+              <MappingFragment StoreEntitySet="tm_StatusMesin">
+                <ScalarProperty Name="StatusMesin_PK" ColumnName="StatusMesin_PK" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Nilai" ColumnName="Nilai" />
+                <ScalarProperty Name="Status_FK" ColumnName="Status_FK" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tt_Daily">
+            <EntityTypeMapping TypeName="HELLOWModel.tt_Daily">
+              <MappingFragment StoreEntitySet="tt_Daily">
+                <ScalarProperty Name="Daily_PK" ColumnName="Daily_PK" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Status_FK" ColumnName="Status_FK" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tt_Transaction">
+            <EntityTypeMapping TypeName="HELLOWModel.tt_Transaction">
+              <MappingFragment StoreEntitySet="tt_Transaction">
+                <ScalarProperty Name="Transaction_PK" ColumnName="Transaction_PK" />
+                <ScalarProperty Name="Daily_FK" ColumnName="Daily_FK" />
+                <ScalarProperty Name="Mesin_FK" ColumnName="Mesin_FK" />
+                <ScalarProperty Name="Status_FK" ColumnName="Status_FK" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tt_TransactionDetail">
+            <EntityTypeMapping TypeName="HELLOWModel.tt_TransactionDetail">
+              <MappingFragment StoreEntitySet="tt_TransactionDetail">
+                <ScalarProperty Name="TransactionDetail_PK" ColumnName="TransactionDetail_PK" />
+                <ScalarProperty Name="Transaction_FK" ColumnName="Transaction_FK" />
+                <ScalarProperty Name="KodeWarna_FK" ColumnName="KodeWarna_FK" />
+                <ScalarProperty Name="Operator_FK" ColumnName="Operator_FK" />
+                <ScalarProperty Name="HasilKain" ColumnName="HasilKain" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="am_Status">
+            <EntityTypeMapping TypeName="HELLOWModel.am_Status">
+              <MappingFragment StoreEntitySet="am_Status">
+                <ScalarProperty Name="Status_PK" ColumnName="Status_PK" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

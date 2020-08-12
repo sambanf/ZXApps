@@ -1,0 +1,44 @@
+﻿@model Asp.NETMVCCRUD.Models.InputTransaksi
+
+@using (Html.BeginForm("Create", "Transaksi", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @Html.HiddenFor(model => model.daily)
+        <div class="form-group">
+            <div class="row">
+                @Html.LabelFor(model => model.mesin, "Kode Mesin", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.ValidationMessageFor(model => model.mesin, "", new { @class = "text-danger" })
+                    @Html.DropDownListFor(x => x.mesin, new SelectList(ViewBag.Testlist, "mesin", "Text"))
+                    @*<select class="form-control dropdown" id="mesinddl">
+
+                            @foreach (var item in ViewBag.Testlist)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+
+                        </select>*@
+                </div>
+            </div>
+            <div class="row">
+                @Html.LabelFor(model => model.kodewarna, "Kode Warna", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.ValidationMessageFor(model => model.kodewarna, "", new { @class = "text-danger" })
+                    @Html.DropDownListFor(x => x.kodewarna, new SelectList(ViewBag.Testlist2, "kodewarna", "Text"), htmlAttributes: new { @class = "col-md-10" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" value="Create" class="btn btn-default" onclick="createtrans()" data-dismiss="modal" />
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+
+</script>
