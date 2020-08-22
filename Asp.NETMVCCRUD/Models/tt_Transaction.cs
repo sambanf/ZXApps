@@ -17,6 +17,7 @@ namespace Asp.NETMVCCRUD.Models
         public int Transaction_PK { get; set; }
         public int Daily_FK { get; set; }
         public int Mesin_FK { get; set; }
+        public int KodeWarna_FK { get; set; }
         public int Status_FK { get; set; }
     }
 }

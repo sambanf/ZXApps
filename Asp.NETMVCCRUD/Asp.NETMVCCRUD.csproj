@@ -266,8 +266,8 @@
     <Content Include="Views\Transaksi\Create.cshtml" />
     <Content Include="Views\Mesin\AddOrEdit.cshtml" />
     <Content Include="Views\Mesin\Index.cshtml" />
-    <Content Include="Views\TransDetail\AddOrEdit.cshtml" />
     <Content Include="Views\TransDetail\MainPage.cshtml" />
+    <Content Include="Views\TransDetail\AddOrEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

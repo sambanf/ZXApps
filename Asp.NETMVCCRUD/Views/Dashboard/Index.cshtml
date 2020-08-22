@@ -37,6 +37,7 @@
                 <th>No</th>
                 <th>Kode Mesin</th>
                 <th>Status Mesin</th>
+                <th>Warna</th>
                 <th></th>
             </tr>
         </thead>
@@ -94,12 +95,13 @@
                             "datatype": "json"
                     },
                     "columns": [
-                        { "data": "Mesin_PK" },
+                        { "data": "Transaction_PK" },
                         { "data": "KodeMesin" },
                         { "data": "StatusMesin" },
+                        { "data": "KodeWarna" },
                         {
-                            "data":"Mesin_PK" , "render" : function (data) {
-                            return "<a class='btn btn-default btn-sm' onclick=ChangePage('@Url.Action("MainPage","TransDetail")/" + data + "')><i class='fa fa-pencil'></i> Tambah Pekerja</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i> Delete</a>";
+                            "data":"Transaction_PK" , "render" : function (data) {
+                            return "<a class='btn btn-default btn-sm' onclick=ChangePage('@Url.Action("MainPage","TransDetail")/" + data + "')><i class='fa fa-info'></i> Details</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i> Delete</a>";
                         },
                             "orderable": false,
                             "searchable":false,

@@ -17,18 +17,21 @@ namespace Asp.NETMVCCRUD.Controllers
         public ActionResult GetData(string date)
         {
             List<Transaksi> result = new List<Transaksi>();
-            using (DBEntities db = new DBEntities())
+            using (HELLOWEntities db = new HELLOWEntities())
             {
                 result = (from trans in db.tt_Transaction
                           join mesin in db.tm_Mesin on trans.Mesin_FK equals mesin.Mesin_PK
                           join statmesin in db.tm_StatusMesin on mesin.StatusMesin_FK equals statmesin.StatusMesin_PK
                           join daily in db.tt_Daily on trans.Daily_FK equals daily.Daily_PK
+                          join kodewarna in db.tm_KodeWarna on trans.KodeWarna_FK equals kodewarna.KodeWarna_PK
                           where trans.Status_FK == 1 && daily.Date.ToString() == date
                           select new Transaksi
                           {
+                              Transaction_PK = trans.Transaction_PK,
                               Mesin_PK = trans.Mesin_FK,
                               KodeMesin = mesin.KodeMesin,
-                              StatusMesin = statmesin.Status
+                              StatusMesin = statmesin.Status,
+                              KodeWarna = kodewarna.KodeWarna
                           }).ToList();
                
             }
@@ -39,7 +42,7 @@ namespace Asp.NETMVCCRUD.Controllers
         [HttpPost]
         public ActionResult Create(string date)
         {
-            using (DBEntities db = new DBEntities())
+            using (HELLOWEntities db = new HELLOWEntities())
             {
                 tt_Daily dailcheck = new tt_Daily();
                 dailcheck = db.tt_Daily.Where(x => x.Date.ToString() == date).FirstOrDefault();

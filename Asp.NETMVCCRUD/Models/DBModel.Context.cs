@@ -13,10 +13,10 @@ namespace Asp.NETMVCCRUD.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class DBEntities : DbContext
+    public partial class HELLOWEntities : DbContext
     {
-        public DBEntities()
-            : base("name=DBEntities")
+        public HELLOWEntities()
+            : base("name=HELLOWEntities")
         {
         }
     
@@ -25,6 +25,7 @@ namespace Asp.NETMVCCRUD.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<am_Status> am_Status { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<tm_KodeWarna> tm_KodeWarna { get; set; }
         public virtual DbSet<tm_Mesin> tm_Mesin { get; set; }
@@ -33,6 +34,5 @@ namespace Asp.NETMVCCRUD.Models
         public virtual DbSet<tt_Daily> tt_Daily { get; set; }
         public virtual DbSet<tt_Transaction> tt_Transaction { get; set; }
         public virtual DbSet<tt_TransactionDetail> tt_TransactionDetail { get; set; }
-        public virtual DbSet<am_Status> am_Status { get; set; }
     }
 }

@@ -19,7 +19,7 @@ namespace Asp.NETMVCCRUD.Controllers
 
         public ActionResult GetData()
         {
-            using (DBEntities db = new DBEntities())
+            using (HELLOWEntities db = new HELLOWEntities())
             {
                 List<tm_Operator> empList = db.tm_Operator.Where(x => x.Status_FK == 1).ToList<tm_Operator>();
                 return Json(new { data = empList }, JsonRequestBehavior.AllowGet);
@@ -34,7 +34,7 @@ namespace Asp.NETMVCCRUD.Controllers
                 return View(new tm_Operator());
             else
             {
-                using (DBEntities db = new DBEntities())
+                using (HELLOWEntities db = new HELLOWEntities())
                 {
                     return View(db.tm_Operator.Where(x => x.Operator_PK==id).FirstOrDefault<tm_Operator>());
                 }
@@ -44,7 +44,7 @@ namespace Asp.NETMVCCRUD.Controllers
         [HttpPost]
         public ActionResult AddOrEdit(tm_Operator emp)
         {
-            using (DBEntities db = new DBEntities())
+            using (HELLOWEntities db = new HELLOWEntities())
             {
                 if (emp.Operator_PK == 0)
                 {
@@ -67,7 +67,7 @@ namespace Asp.NETMVCCRUD.Controllers
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            using (DBEntities db = new DBEntities())
+            using (HELLOWEntities db = new HELLOWEntities())
             {
                 tm_Operator emp = db.tm_Operator.Where(x => x.Operator_PK == id).FirstOrDefault<tm_Operator>();
                 emp.Status_FK = 2;

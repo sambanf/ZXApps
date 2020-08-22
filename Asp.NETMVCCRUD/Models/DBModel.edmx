@@ -5,12 +5,9 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="HELLOWModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'HELLOW.dbo.am_Status' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="am_Status">
           <Key>
             <PropertyRef Name="Status_PK" />
-            <PropertyRef Name="Title" />
           </Key>
           <Property Name="Status_PK" Type="int" Nullable="false" />
           <Property Name="Title" Type="varchar" MaxLength="10" Nullable="false" />
@@ -77,19 +74,22 @@ warning 6002: The table/view 'HELLOW.dbo.am_Status' does not have a primary key 
           <Property Name="Transaction_PK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Daily_FK" Type="int" Nullable="false" />
           <Property Name="Mesin_FK" Type="int" Nullable="false" />
+          <Property Name="KodeWarna_FK" Type="int" Nullable="false" />
           <Property Name="Status_FK" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="tt_TransactionDetail">
           <Key>
             <PropertyRef Name="TransactionDetail_PK" />
           </Key>
-          <Property Name="TransactionDetail_PK" Type="int" Nullable="false" />
-          <Property Name="Transaction_FK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TransactionDetail_PK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Transaction_FK" Type="int" Nullable="false" />
           <Property Name="KodeWarna_FK" Type="int" Nullable="false" />
           <Property Name="Operator_FK" Type="int" Nullable="false" />
           <Property Name="HasilKain" Type="float" Nullable="false" />
+          <Property Name="Status_FK" Type="int" Nullable="false" />
         </EntityType>
         <EntityContainer Name="HELLOWModelStoreContainer">
+          <EntitySet Name="am_Status" EntityType="Self.am_Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tm_KodeWarna" EntityType="Self.tm_KodeWarna" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tm_Mesin" EntityType="Self.tm_Mesin" Schema="dbo" store:Type="Tables" />
@@ -98,18 +98,19 @@ warning 6002: The table/view 'HELLOW.dbo.am_Status' does not have a primary key 
           <EntitySet Name="tt_Daily" EntityType="Self.tt_Daily" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tt_Transaction" EntityType="Self.tt_Transaction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tt_TransactionDetail" EntityType="Self.tt_TransactionDetail" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="am_Status" EntityType="Self.am_Status" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [am_Status].[Status_PK] AS [Status_PK], 
-    [am_Status].[Title] AS [Title]
-    FROM [dbo].[am_Status] AS [am_Status]</DefiningQuery>
-          </EntitySet>
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="HELLOWModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="am_Status">
+          <Key>
+            <PropertyRef Name="Status_PK" />
+          </Key>
+          <Property Name="Status_PK" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -172,27 +173,22 @@ warning 6002: The table/view 'HELLOW.dbo.am_Status' does not have a primary key 
           <Property Name="Transaction_PK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Daily_FK" Type="Int32" Nullable="false" />
           <Property Name="Mesin_FK" Type="Int32" Nullable="false" />
+          <Property Name="KodeWarna_FK" Type="Int32" Nullable="false" />
           <Property Name="Status_FK" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="tt_TransactionDetail">
           <Key>
             <PropertyRef Name="TransactionDetail_PK" />
           </Key>
-          <Property Name="TransactionDetail_PK" Type="Int32" Nullable="false" />
-          <Property Name="Transaction_FK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TransactionDetail_PK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Transaction_FK" Type="Int32" Nullable="false" />
           <Property Name="KodeWarna_FK" Type="Int32" Nullable="false" />
           <Property Name="Operator_FK" Type="Int32" Nullable="false" />
           <Property Name="HasilKain" Type="Double" Nullable="false" />
-        </EntityType>
-        <EntityType Name="am_Status">
-          <Key>
-            <PropertyRef Name="Status_PK" />
-            <PropertyRef Name="Title" />
-          </Key>
-          <Property Name="Status_PK" Type="Int32" Nullable="false" />
-          <Property Name="Title" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Status_FK" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityContainer Name="HELLOWEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="am_Status" EntityType="Self.am_Status" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
           <EntitySet Name="tm_KodeWarna" EntityType="Self.tm_KodeWarna" />
           <EntitySet Name="tm_Mesin" EntityType="Self.tm_Mesin" />
@@ -201,7 +197,6 @@ warning 6002: The table/view 'HELLOW.dbo.am_Status' does not have a primary key 
           <EntitySet Name="tt_Daily" EntityType="Self.tt_Daily" />
           <EntitySet Name="tt_Transaction" EntityType="Self.tt_Transaction" />
           <EntitySet Name="tt_TransactionDetail" EntityType="Self.tt_TransactionDetail" />
-          <EntitySet Name="am_Status" EntityType="Self.am_Status" />
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -209,6 +204,14 @@ warning 6002: The table/view 'HELLOW.dbo.am_Status' does not have a primary key 
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="HELLOWModelStoreContainer" CdmEntityContainer="HELLOWEntities">
+          <EntitySetMapping Name="am_Status">
+            <EntityTypeMapping TypeName="HELLOWModel.am_Status">
+              <MappingFragment StoreEntitySet="am_Status">
+                <ScalarProperty Name="Status_PK" ColumnName="Status_PK" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="sysdiagrams">
             <EntityTypeMapping TypeName="HELLOWModel.sysdiagram">
               <MappingFragment StoreEntitySet="sysdiagrams">
@@ -276,6 +279,7 @@ warning 6002: The table/view 'HELLOW.dbo.am_Status' does not have a primary key 
                 <ScalarProperty Name="Transaction_PK" ColumnName="Transaction_PK" />
                 <ScalarProperty Name="Daily_FK" ColumnName="Daily_FK" />
                 <ScalarProperty Name="Mesin_FK" ColumnName="Mesin_FK" />
+                <ScalarProperty Name="KodeWarna_FK" ColumnName="KodeWarna_FK" />
                 <ScalarProperty Name="Status_FK" ColumnName="Status_FK" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -288,14 +292,7 @@ warning 6002: The table/view 'HELLOW.dbo.am_Status' does not have a primary key 
                 <ScalarProperty Name="KodeWarna_FK" ColumnName="KodeWarna_FK" />
                 <ScalarProperty Name="Operator_FK" ColumnName="Operator_FK" />
                 <ScalarProperty Name="HasilKain" ColumnName="HasilKain" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="am_Status">
-            <EntityTypeMapping TypeName="HELLOWModel.am_Status">
-              <MappingFragment StoreEntitySet="am_Status">
-                <ScalarProperty Name="Status_PK" ColumnName="Status_PK" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Status_FK" ColumnName="Status_FK" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

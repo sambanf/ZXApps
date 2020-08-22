@@ -19,7 +19,7 @@ namespace Asp.NETMVCCRUD.Controllers
         {
             List<DDLMesin> result = new List<DDLMesin>();
             List<DDLKodeWarna> result2 = new List<DDLKodeWarna>();
-            using (DBEntities db = new DBEntities())
+            using (HELLOWEntities db = new HELLOWEntities())
             {
                 result = (from mesin in db.tm_Mesin
                           join statmesin in db.tm_StatusMesin on mesin.StatusMesin_FK equals statmesin.StatusMesin_PK
@@ -49,7 +49,7 @@ namespace Asp.NETMVCCRUD.Controllers
         public ActionResult Create(InputTransaksi input)
         {
             
-            using (DBEntities db = new DBEntities())
+            using (HELLOWEntities db = new HELLOWEntities())
             {
                 tt_Daily dail = new tt_Daily();
                 DateTime datehehe = Convert.ToDateTime(input.daily);
@@ -57,6 +57,7 @@ namespace Asp.NETMVCCRUD.Controllers
                 tt_Transaction transaction = new tt_Transaction();
                 transaction.Mesin_FK = input.mesin;
                 transaction.Daily_FK = dail.Daily_PK;
+                transaction.KodeWarna_FK = input.kodewarna;
                 transaction.Status_FK = 1;
                 db.tt_Transaction.Add(transaction);
                 db.SaveChanges();
@@ -68,7 +69,7 @@ namespace Asp.NETMVCCRUD.Controllers
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            using (DBEntities db = new DBEntities())
+            using (HELLOWEntities db = new HELLOWEntities())
             {
                 tt_Transaction emp = db.tt_Transaction.Where(x => x.Transaction_PK == id).FirstOrDefault<tt_Transaction>();
                 emp.Status_FK = 2;  

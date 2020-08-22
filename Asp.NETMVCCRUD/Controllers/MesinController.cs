@@ -19,7 +19,7 @@ namespace Asp.NETMVCCRUD.Controllers
 
         public ActionResult GetData()
         {
-            using (DBEntities db = new DBEntities())
+            using (HELLOWEntities db = new HELLOWEntities())
             {
                 List<tm_Mesin> empList = db.tm_Mesin.Where(x => x.Status_FK == 1).ToList<tm_Mesin>();
                 return Json(new { data = empList }, JsonRequestBehavior.AllowGet);
@@ -34,7 +34,7 @@ namespace Asp.NETMVCCRUD.Controllers
                 return View(new tm_Mesin());
             else
             {
-                using (DBEntities db = new DBEntities())
+                using (HELLOWEntities db = new HELLOWEntities())
                 {
                     return View(db.tm_Mesin.Where(x => x.Mesin_PK==id).FirstOrDefault<tm_Mesin>());
                 }
@@ -44,7 +44,7 @@ namespace Asp.NETMVCCRUD.Controllers
         [HttpPost]
         public ActionResult AddOrEdit(tm_Mesin emp)
         {
-            using (DBEntities db = new DBEntities())
+            using (HELLOWEntities db = new HELLOWEntities())
             {
                 if (emp.Mesin_PK == 0)
                 {
@@ -67,7 +67,7 @@ namespace Asp.NETMVCCRUD.Controllers
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            using (DBEntities db = new DBEntities())
+            using (HELLOWEntities db = new HELLOWEntities())
             {
                 tm_Mesin emp = db.tm_Mesin.Where(x => x.Mesin_PK == id).FirstOrDefault<tm_Mesin>();
                 emp.Status_FK = 2;

@@ -19,5 +19,6 @@ namespace Asp.NETMVCCRUD.Models
         public int KodeWarna_FK { get; set; }
         public int Operator_FK { get; set; }
         public double HasilKain { get; set; }
+        public int Status_FK { get; set; }
     }
 }

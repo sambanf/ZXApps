@@ -25,10 +25,12 @@ namespace Asp.NETMVCCRUD.Models
 
     public class Transaksi
     {
+        public int Transaction_PK { get; set; }
         public int Mesin_PK { get; set; }
         public int KodeMesin { get; set; }
         public string StatusMesin { get; set; }
-        
+        public string KodeWarna { get; set; }
+
     }
 
     public class InputTransaksi
@@ -45,7 +47,19 @@ namespace Asp.NETMVCCRUD.Models
 
     public class TransDetailView
     {
+        public string Tanggal { get; set; }
+        public int transfk { get; set; }
         public string mesin { get; set; }
-        public string kodewarna { get; set; } // date
+        public string kodewarna { get; set; } 
     }
+
+    public class TransDetailList
+    {
+        public int TransDetailPK { get; set; }
+        public string NoOperator { get; set; }
+        public string NamaOp { get; set; }
+        public double HasilKain { get; set; }
+    }
+
+
 }
