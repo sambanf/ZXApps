@@ -61,5 +61,26 @@ namespace Asp.NETMVCCRUD.Models
         public double HasilKain { get; set; }
     }
 
+    public class ReportList
+    {
+        public string Tanggal { get; set; }
+        public string KodeWarna { get; set; }
+        public string StatusMesin { get; set; }
+        public double HasilKain { get; set; }
+        public int Pick { get; set; }
+        public double Nilai { get; set; }
+        public double HargaMeter { get; set; }
+        public double Total { get; set; }
+
+    }
+
+    public class ReportProperty
+    {
+        public int Bulan { get; set; }
+        public int Tahun { get; set; }
+        public int Operator { get; set; }
+    }
+
+
 
 }

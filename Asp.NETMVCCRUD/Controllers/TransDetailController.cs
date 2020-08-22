@@ -15,28 +15,28 @@ namespace Asp.NETMVCCRUD.Controllers
         {
             if (id == 0)
             {
-                return RedirectToAction("Index","Dashboard"); 
+                return RedirectToAction("Index", "Dashboard");
             }
             else
             {
                 using (HELLOWEntities db = new HELLOWEntities())
                 {
                     TransDetailView transDetailView = (from trans in db.tt_Transaction
-                          join mesin in db.tm_Mesin on trans.Mesin_FK equals mesin.Mesin_PK
-                          join statmesin in db.tm_StatusMesin on mesin.StatusMesin_FK equals statmesin.StatusMesin_PK
-                          join daily in db.tt_Daily on trans.Daily_FK equals daily.Daily_PK
-                          join kodewarna in db.tm_KodeWarna on trans.KodeWarna_FK equals kodewarna.KodeWarna_PK
-                          where trans.Status_FK == 1 && trans.Transaction_PK == id
-                          select new TransDetailView
-                          {
-                              Tanggal = daily.Date.ToString(),
-                              transfk = trans.Transaction_PK,
-                              mesin = mesin.KodeMesin + "(" + statmesin.Status + ")",
-                              kodewarna = kodewarna.KodeWarna
-                          }).FirstOrDefault();
+                                                       join mesin in db.tm_Mesin on trans.Mesin_FK equals mesin.Mesin_PK
+                                                       join statmesin in db.tm_StatusMesin on mesin.StatusMesin_FK equals statmesin.StatusMesin_PK
+                                                       join daily in db.tt_Daily on trans.Daily_FK equals daily.Daily_PK
+                                                       join kodewarna in db.tm_KodeWarna on trans.KodeWarna_FK equals kodewarna.KodeWarna_PK
+                                                       where trans.Status_FK == 1 && trans.Transaction_PK == id
+                                                       select new TransDetailView
+                                                       {
+                                                           Tanggal = daily.Date.ToString(),
+                                                           transfk = trans.Transaction_PK,
+                                                           mesin = mesin.KodeMesin + "(" + statmesin.Status + ")",
+                                                           kodewarna = kodewarna.KodeWarna
+                                                       }).FirstOrDefault();
                     return View(transDetailView);
                 }
-            } 
+            }
         }
 
         public ActionResult GetData(int id)
@@ -63,12 +63,36 @@ namespace Asp.NETMVCCRUD.Controllers
         [HttpGet]
         public ActionResult AddOrEdit(int id = 0)
         {
+            List<DDLOperator> result = new List<DDLOperator>();
             if (id == 0)
-                return View(new tt_TransactionDetail());
+            {
+                using (HELLOWEntities db = new HELLOWEntities())
+                {
+                    result = (from oper in db.tm_Operator
+                              where oper.Status_FK == 1
+                              select new DDLOperator
+                              {
+                                  operatorpk = oper.Operator_PK,
+                                  Text = oper.NIP + " - " + oper.Nama
+                              }).ToList();
+                    ViewBag.OperatorList =result;
+
+                    return View(new tt_TransactionDetail());
+                }
+            }
             else
             {
                 using (HELLOWEntities db = new HELLOWEntities())
                 {
+                    result = (from oper in db.tm_Operator
+                              where oper.Status_FK == 1
+                              select new DDLOperator
+                              {
+                                  operatorpk = oper.Operator_PK,
+                                  Text = oper.NIP + " - " + oper.Nama
+                              }).ToList();
+                    ViewBag.OperatorList = new SelectList(result, "operatorpk", "Text");
+
                     return View(db.tt_TransactionDetail.Where(x => x.TransactionDetail_PK == id).FirstOrDefault<tt_TransactionDetail>());
                 }
             }
@@ -105,7 +129,7 @@ namespace Asp.NETMVCCRUD.Controllers
         {
             using (HELLOWEntities db = new HELLOWEntities())
             {
-                tm_Operator emp = db.tm_Operator.Where(x => x.Operator_PK == id).FirstOrDefault<tm_Operator>();
+                tt_TransactionDetail emp = db.tt_TransactionDetail.Where(x => x.TransactionDetail_PK == id).FirstOrDefault<tt_TransactionDetail>();
                 emp.Status_FK = 2;
                 db.SaveChanges();
                 return Json(new { success = true, message = "Deleted Successfully" }, JsonRequestBehavior.AllowGet);

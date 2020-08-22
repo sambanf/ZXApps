@@ -207,6 +207,7 @@
     <Compile Include="Controllers\KodeWarnaController.cs" />
     <Compile Include="Controllers\MesinController.cs" />
     <Compile Include="Controllers\OperatorController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\TransaksiController.cs" />
     <Compile Include="Controllers\TransDetailController.cs" />
     <Compile Include="Global.asax.cs">
@@ -268,6 +269,7 @@
     <Content Include="Views\Mesin\Index.cshtml" />
     <Content Include="Views\TransDetail\MainPage.cshtml" />
     <Content Include="Views\TransDetail\AddOrEdit.cshtml" />
+    <Content Include="Views\Report\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

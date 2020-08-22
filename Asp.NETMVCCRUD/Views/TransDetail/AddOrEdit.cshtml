@@ -2,21 +2,20 @@
 @{
     Layout = null;
 }
-@using (Html.BeginForm("AddOrEdit", "TransDetail", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Transaction Detail</h4>
-        <hr />
+
+        <br />
 
         @Html.HiddenFor(model => model.TransactionDetail_PK)
 
         <div class="form-group">
             @Html.LabelFor(model => model.Operator_FK, "Operator", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Operator_FK, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Operator_FK, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(x => x.Operator_FK, new SelectList(ViewBag.OperatorList, "operatorpk", "Text"), htmlAttributes: new { @class = "form-control dropdown" })
             </div>
         </div>
 
@@ -24,7 +23,6 @@
             @Html.LabelFor(model => model.HasilKain, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-8">
                 @Html.EditorFor(model => model.HasilKain, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.HasilKain, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-2">
                 <label class="control-label">meter</label>
@@ -34,8 +32,17 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                @*<input type="submit" value="Create" class="btn btn-default" />*@
+                <input type="button" value="Create" class="btn btn-default" onclick="formsub()" data-dismiss="modal" />
             </div>
         </div>
     </div>
 }
+
+<script type="text/javascript">
+        $("#Operator_FK").select2({
+            width: '70%'
+        });
+    
+
+</script>

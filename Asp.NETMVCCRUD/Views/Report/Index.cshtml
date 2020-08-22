@@ -1,29 +1,68 @@
-﻿@model Asp.NETMVCCRUD.Models.TransDetailView
-@{
-    ViewBag.Title = "Operator List";
+﻿@{
+    ViewBag.Title = "KodeWarna List";
 }
 
-<h2>Operator</h2>
-@Html.HiddenFor(model => model.transfk)
-<h3>
-    Date : @Html.DisplayFor(model => model.Tanggal)
-</h3>
-<h5>
-    Kode Mesin : @Html.DisplayFor(model => model.mesin)
-</h5>
-<h5>
-    Kode Warna : @Html.DisplayFor(model => model.kodewarna)
-</h5>
-<a class="btn btn-success" style="margin-bottom:10px" onclick="PopupForm('@Url.Action("AddOrEdit","TransDetail")')"><i class="fa fa-plus"></i> Add New</a>
+<h2>KodeWarna</h2>
+<div class="row">
+    <div class="col-md-1">
+        <label>Bulan</label>
+    </div>
+    <div class="col-md-4">
+        <select class="form-control dropdown" id="bulan">
+            <option value="1">Januari</option>
+            <option value="2">Februari</option>
+            <option value="3">Maret</option>
+            <option value="4">April</option>
+            <option value="5">Mei</option>
+            <option value="6">Juni</option>
+            <option value="7">Juli</option>
+            <option value="8">Agustus</option>
+            <option value="9">September</option>
+            <option value="10">Oktober</option>
+            <option value="11">November</option>
+            <option value="12">Desember</option>
+        </select>
+    </div>
+    <div class="col-md-1">
+        <label>Tahun</label>
+    </div>
+    <div class="col-md-4">
+        <select class="form-control dropdown" id="tahun">
+            <option value="2020">2020</option>
+        </select>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-1">
+        <label>Operator</label>
+    </div>
+    <div class="col-md-4">
+        <select class="form-control dropdown" id="oper">
+            @foreach (var item in ViewBag.OperatorList)
+            {
+                <option value="@item.Value">@item.Text</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-4">
+        <button onclick="searchreport()" class="form-control btn btn-primary">Search</button>
+    </div>
+</div>
+<br />
 
-<table id="OperatorTable" class="table table-striped table-bordered" style="width:100%">
+<table id="reporttable" class="table table-striped table-bordered" style="width:100%">
     <thead>
         <tr>
             <th>No</th>
-            <th>No Operator</th>
-            <th>Nama Operator</th>
-            <th>Hasil Kain</th>
-            <th></th>
+            <th>Tanggal</th>
+            <th>Kode Warna</th>
+            <th>StatusMesin</th>
+            <th>HasilKain</th>
+            <th>Pick</th>
+            <th>Nilai</th>
+            <th>Harga / Meter</th>
+            <th>Total</th>
         </tr>
     </thead>
 </table>
@@ -37,34 +76,31 @@
 
     <script>
         var Popup, dataTable;
-        var data = { id: $("#transfk").val() };
-        function datatablereload() {
-            $('#OperatorTable').DataTable().clear().destroy();
-             dataTable =  $("#OperatorTable").DataTable({
+        function searchreport() {
+            var data = { Bulan: $("#bulan").val(), Tahun: $("#tahun").val(), Operator: $("#oper").val() }
+            $('#reporttable').DataTable().clear().destroy();
+            dataTable = $("#reporttable").DataTable({
                 "ajax": {
-                    "url": "/TransDetail/GetData",
+                    "url": "/Report/GetData",
                     "type": "GET",
-                    "data": data,
-                    "datatype": "json"
+                    "datatype": "json",
+                    "data": data
                 },
                 "columns": [
-                    { "data": "TransDetailPK" },
-                    { "data": "NoOperator" },
-                    { "data": "NamaOp" },
+                    { "data": "Tanggal" },
+                    { "data": "Tanggal" },
+                    { "data": "KodeWarna" },
+                    { "data": "StatusMesin" },
                     { "data": "HasilKain" },
-                    {
-                        "data":"TransDetailPK" , "render" : function (data) {
-                        return "<a class='btn btn-default btn-sm' onclick=PopupForm('@Url.Action("AddOrEdit","TransDetail")/" + data + "')><i class='fa fa-pencil'></i> Edit</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i> Delete</a>";
-                    },
-                        "orderable": false,
-                        "searchable":false,
-                        "width":"150px"
-                    }
+                    { "data": "Pick" },
+                    { "data": "Nilai" },
+                    { "data": "HargaMeter" },
+                    { "data": "Total" },
 
                 ],
                 "language": {
 
-                    "emptyTable" : "No data found, Please click on <b>Add New</b> Button"
+                    "emptyTable": "No data found, Please click on <b>Add New</b> Button"
                 },
                 "columnDefs": [{
                     "searchable": false,
@@ -78,10 +114,11 @@
                     cell.innerHTML = i + 1;
                 });
             }).draw();
+            //var sum = $('#reporttable').DataTable().column(9).data().sum()
         }
-        $(document).ready(function () {
-            datatablereload();
-        });
+        
+
+
 
         function PopupForm(url) {
             var formDiv = $('<div/>');
@@ -92,7 +129,7 @@
                 Popup = formDiv.dialog({
                     autoOpen: true,
                     resizable: false,
-                    title: 'Fill Transaction Details',
+                    title: 'Fill KodeWarna Details',
                     height: 350,
                     width: 700,
                     close: function () {
@@ -128,12 +165,12 @@
             return false;
         }
 
-     function Delete(id) {
-            if(confirm('Are You Sure to Delete this Operator Record ?'))
+        function Delete(id) {
+            if(confirm('Are You Sure to Delete this KodeWarna Record ?'))
             {
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("Delete","TransDetail")/' + id,
+                    url: '@Url.Action("Delete","KodeWarna")/' + id,
                     success: function (data) {
                         if (data.success)
                         {
@@ -150,22 +187,5 @@
                 });
             }
         }
-
-
-    function formsub() {
-         var data = { Transaction_FK: $("#transfk").val(), Operator_FK: $("#Operator_FK").val(), HasilKain: $("#HasilKain").val() }
-         $.ajax({
-                    url: '@Url.Action("AddOrEdit", "TransDetail")',
-                    type: 'POST',
-                    data: data,
-                success: function (result) {
-                 Popup.dialog('close');
-                        datatablereload()
-                    },
-                    error: function (err) {
-                        alert(err);
-                    }
-                });
-    }
     </script>
 }
