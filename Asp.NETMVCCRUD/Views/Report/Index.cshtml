@@ -66,13 +66,23 @@
         </tr>
     </thead>
 </table>
+<div class="row">
+    <div class="col-md-10">
+
+    </div>
+    <div class="col-md-2">
+        <label>Total : </label><label id="summary"></label>
+    </div>
+</div>
 
 <link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 
 @section scripts{
     <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+    <script src="cdn.datatables.net/plug-ins/1.10.21/api/sum().js"></script>
 
     <script>
         var Popup, dataTable;
@@ -84,7 +94,7 @@
                     "url": "/Report/GetData",
                     "type": "GET",
                     "datatype": "json",
-                    "data": data
+                    "data": data                    
                 },
                 "columns": [
                     { "data": "Tanggal" },
@@ -115,8 +125,21 @@
                 });
             }).draw();
             //var sum = $('#reporttable').DataTable().column(9).data().sum()
+
+             $.ajax({
+                    url: '@Url.Action("GetSum", "Report")',
+                    type: 'GET',
+                    data: data,
+                    success: function (result) {
+                        console.log(result);
+                        $("#summary").html(result.data);
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                });
         }
-        
+
 
 
 

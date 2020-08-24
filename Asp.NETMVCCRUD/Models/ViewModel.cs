@@ -11,6 +11,12 @@ namespace Asp.NETMVCCRUD.Models
         public string Text { get; set; }
     }
 
+    public class DDLStatMesin
+    {
+        public int statmesinpk { get; set; }
+        public string Text { get; set; }
+    }
+
     public class DDLKodeWarna
     {
         public int kodewarna { get; set; }
@@ -22,6 +28,17 @@ namespace Asp.NETMVCCRUD.Models
         public int operatorpk { get; set; }
         public string Text { get; set; }
     }
+
+
+
+    public class MesinList
+    {
+        public int Mesin_PK { get; set; }
+        public int KodeMesin { get; set; }
+        public string StatusMesin { get; set; }
+    }
+
+
 
     public class Transaksi
     {

@@ -37,7 +37,7 @@ namespace Asp.NETMVCCRUD.Controllers
             List<ReportList> result = new List<ReportList>();
             using (HELLOWEntities db = new HELLOWEntities())
             {
-                var x = (from td in db.tt_TransactionDetail
+                result = (from td in db.tt_TransactionDetail
                          join t in db.tt_Transaction on td.Transaction_FK equals t.Transaction_PK
                          join mesin in db.tm_Mesin on t.Mesin_FK equals mesin.Mesin_PK
                          join statmesin in db.tm_StatusMesin on mesin.StatusMesin_FK equals statmesin.StatusMesin_PK
@@ -54,13 +54,44 @@ namespace Asp.NETMVCCRUD.Controllers
                              Nilai = statmesin.Nilai,
                              HargaMeter = kodewarna.Pick * statmesin.Nilai,
                              Total = kodewarna.Pick * statmesin.Nilai * td.HasilKain
-                         });
+                         }).ToList();
                           
-                          result = x.ToList();
-
             }
             return Json(new { data = result }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GetSum(ReportProperty rp)
+        {
+            List<ReportList> result = new List<ReportList>();
+            using (HELLOWEntities db = new HELLOWEntities())
+            {
+                result = (from td in db.tt_TransactionDetail
+                          join t in db.tt_Transaction on td.Transaction_FK equals t.Transaction_PK
+                          join mesin in db.tm_Mesin on t.Mesin_FK equals mesin.Mesin_PK
+                          join statmesin in db.tm_StatusMesin on mesin.StatusMesin_FK equals statmesin.StatusMesin_PK
+                          join daily in db.tt_Daily on t.Daily_FK equals daily.Daily_PK
+                          join kodewarna in db.tm_KodeWarna on t.KodeWarna_FK equals kodewarna.KodeWarna_PK
+                          where td.Status_FK == 1 && td.Operator_FK == rp.Operator && daily.Date.Month == rp.Bulan && daily.Date.Year == rp.Tahun
+                          select new ReportList
+                          {
+                              Tanggal = daily.Date.ToString(),
+                              KodeWarna = kodewarna.KodeWarna,
+                              StatusMesin = statmesin.Status,
+                              HasilKain = td.HasilKain,
+                              Pick = kodewarna.Pick,
+                              Nilai = statmesin.Nilai,
+                              HargaMeter = kodewarna.Pick * statmesin.Nilai,
+                              Total = kodewarna.Pick * statmesin.Nilai * td.HasilKain
+                          }).ToList();
+            }
+            double summary = 0;
+            foreach (var item in result)
+            {
+                summary += item.Total;
+            }
+            return Json(new { data = summary }, JsonRequestBehavior.AllowGet);
+        }
+
 
 
         [HttpGet]

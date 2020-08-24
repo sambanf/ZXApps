@@ -91,7 +91,7 @@ namespace Asp.NETMVCCRUD.Controllers
                                   operatorpk = oper.Operator_PK,
                                   Text = oper.NIP + " - " + oper.Nama
                               }).ToList();
-                    ViewBag.OperatorList = new SelectList(result, "operatorpk", "Text");
+                    ViewBag.OperatorList = result;
 
                     return View(db.tt_TransactionDetail.Where(x => x.TransactionDetail_PK == id).FirstOrDefault<tt_TransactionDetail>());
                 }

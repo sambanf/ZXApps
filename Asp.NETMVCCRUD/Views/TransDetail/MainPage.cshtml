@@ -153,7 +153,7 @@
 
 
     function formsub() {
-         var data = { Transaction_FK: $("#transfk").val(), Operator_FK: $("#Operator_FK").val(), HasilKain: $("#HasilKain").val() }
+        var data = { Transaction_FK: $("#transfk").val(), Operator_FK: $("#Operator_FK").val(), HasilKain: $("#HasilKain").val(), TransactionDetail_PK: $("#TransactionDetail_PK").val()  }
          $.ajax({
                     url: '@Url.Action("AddOrEdit", "TransDetail")',
                     type: 'POST',
