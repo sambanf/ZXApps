@@ -22,7 +22,7 @@ namespace Asp.NETMVCCRUD.Controllers
                           select new DDLOperator
                           {
                               operatorpk = oper.Operator_PK,
-                              Text = oper.NIP + " - " + oper.Nama
+                              Text = oper.NoOperator + " - " + oper.Nama
                           }).ToList();
                 ViewBag.OperatorList = new SelectList(result, "operatorpk", "Text");
 
