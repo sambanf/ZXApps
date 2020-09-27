@@ -19,5 +19,6 @@ namespace Asp.NETMVCCRUD.Models
         public int Mesin_FK { get; set; }
         public int KodeWarna_FK { get; set; }
         public int Status_FK { get; set; }
+        public Nullable<double> Penambahan { get; set; }
     }
 }

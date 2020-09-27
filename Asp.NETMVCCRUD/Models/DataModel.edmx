@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="HELLOWModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="HELLOWModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="am_Status">
           <Key>
             <PropertyRef Name="Status_PK" />
@@ -100,7 +100,8 @@
           <EntitySet Name="tt_Transaction" EntityType="Self.tt_Transaction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tt_TransactionDetail" EntityType="Self.tt_TransactionDetail" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="HELLOWModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -174,8 +175,8 @@
           <Property Name="Daily_FK" Type="Int32" Nullable="false" />
           <Property Name="Mesin_FK" Type="Int32" Nullable="false" />
           <Property Name="KodeWarna_FK" Type="Int32" Nullable="false" />
-          <Property Name="Status_FK" Type="Int32" Nullable="false" />
           <Property Name="Penambahan" Type="Double" />
+          <Property Name="Status_FK" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="tt_TransactionDetail">
           <Key>
@@ -188,7 +189,7 @@
           <Property Name="HasilKain" Type="Double" Nullable="false" />
           <Property Name="Status_FK" Type="Int32" Nullable="false" />
         </EntityType>
-        <EntityContainer Name="HELLOWEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="am_Status" EntityType="Self.am_Status" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
           <EntitySet Name="tm_KodeWarna" EntityType="Self.tm_KodeWarna" />
@@ -204,7 +205,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="HELLOWModelStoreContainer" CdmEntityContainer="HELLOWEntities">
+        <EntityContainerMapping StorageEntityContainer="HELLOWModelStoreContainer" CdmEntityContainer="Entities">
           <EntitySetMapping Name="am_Status">
             <EntityTypeMapping TypeName="HELLOWModel.am_Status">
               <MappingFragment StoreEntitySet="am_Status">
@@ -277,11 +278,11 @@
           <EntitySetMapping Name="tt_Transaction">
             <EntityTypeMapping TypeName="HELLOWModel.tt_Transaction">
               <MappingFragment StoreEntitySet="tt_Transaction">
-                <ScalarProperty Name="Penambahan" ColumnName="Penambahan" />
                 <ScalarProperty Name="Transaction_PK" ColumnName="Transaction_PK" />
                 <ScalarProperty Name="Daily_FK" ColumnName="Daily_FK" />
                 <ScalarProperty Name="Mesin_FK" ColumnName="Mesin_FK" />
                 <ScalarProperty Name="KodeWarna_FK" ColumnName="KodeWarna_FK" />
+                <ScalarProperty Name="Penambahan" ColumnName="Penambahan" />
                 <ScalarProperty Name="Status_FK" ColumnName="Status_FK" />
               </MappingFragment>
             </EntityTypeMapping>

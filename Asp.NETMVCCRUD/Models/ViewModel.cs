@@ -55,11 +55,13 @@ namespace Asp.NETMVCCRUD.Models
         public int mesin { get; set; }
         public string daily { get; set; } // date
         public int kodewarna { get; set; }
+        public double Penambahan { get; set; }
+        public List<InputTransaksiDetail> transdetail { get; set; }
     }
     public class InputTransaksiDetail
     {
-        public int mesin { get; set; }
-        public string daily { get; set; } // date
+        public int nooperator { get; set; }
+        public double hasil { get; set; } // date
     }
 
     public class TransDetailView
