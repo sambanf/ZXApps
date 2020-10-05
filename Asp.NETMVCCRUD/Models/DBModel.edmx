@@ -50,6 +50,16 @@
           <Property Name="Nama" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Status_FK" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="tm_Recorder">
+          <Key>
+            <PropertyRef Name="Recorder_PK" />
+          </Key>
+          <Property Name="Recorder_PK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NoRecorder" Type="int" Nullable="false" />
+          <Property Name="NIP" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Nama" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Status_FK" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="tm_StatusMesin">
           <Key>
             <PropertyRef Name="StatusMesin_PK" />
@@ -75,6 +85,8 @@
           <Property Name="Daily_FK" Type="int" Nullable="false" />
           <Property Name="Mesin_FK" Type="int" Nullable="false" />
           <Property Name="KodeWarna_FK" Type="int" Nullable="false" />
+          <Property Name="Recorder_FK" Type="int" Nullable="false" />
+          <Property Name="SheetNum" Type="varchar" MaxLength="10" />
           <Property Name="Penambahan" Type="float" />
           <Property Name="Status_FK" Type="int" Nullable="false" />
         </EntityType>
@@ -95,6 +107,7 @@
           <EntitySet Name="tm_KodeWarna" EntityType="Self.tm_KodeWarna" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tm_Mesin" EntityType="Self.tm_Mesin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tm_Operator" EntityType="Self.tm_Operator" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tm_Recorder" EntityType="Self.tm_Recorder" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tm_StatusMesin" EntityType="Self.tm_StatusMesin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tt_Daily" EntityType="Self.tt_Daily" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tt_Transaction" EntityType="Self.tt_Transaction" Schema="dbo" store:Type="Tables" />
@@ -176,6 +189,8 @@
           <Property Name="KodeWarna_FK" Type="Int32" Nullable="false" />
           <Property Name="Status_FK" Type="Int32" Nullable="false" />
           <Property Name="Penambahan" Type="Double" />
+          <Property Name="Recorder_FK" Type="Int32" Nullable="false" />
+          <Property Name="SheetNum" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tt_TransactionDetail">
           <Key>
@@ -198,7 +213,18 @@
           <EntitySet Name="tt_Daily" EntityType="Self.tt_Daily" />
           <EntitySet Name="tt_Transaction" EntityType="Self.tt_Transaction" />
           <EntitySet Name="tt_TransactionDetail" EntityType="Self.tt_TransactionDetail" />
+          <EntitySet Name="tm_Recorder" EntityType="HELLOWModel.tm_Recorder" />
         </EntityContainer>
+        <EntityType Name="tm_Recorder">
+          <Key>
+            <PropertyRef Name="Recorder_PK" />
+          </Key>
+          <Property Name="Recorder_PK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NoRecorder" Type="Int32" Nullable="false" />
+          <Property Name="NIP" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Nama" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Status_FK" Type="Int32" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -277,6 +303,8 @@
           <EntitySetMapping Name="tt_Transaction">
             <EntityTypeMapping TypeName="HELLOWModel.tt_Transaction">
               <MappingFragment StoreEntitySet="tt_Transaction">
+                <ScalarProperty Name="SheetNum" ColumnName="SheetNum" />
+                <ScalarProperty Name="Recorder_FK" ColumnName="Recorder_FK" />
                 <ScalarProperty Name="Penambahan" ColumnName="Penambahan" />
                 <ScalarProperty Name="Transaction_PK" ColumnName="Transaction_PK" />
                 <ScalarProperty Name="Daily_FK" ColumnName="Daily_FK" />
@@ -295,6 +323,17 @@
                 <ScalarProperty Name="Operator_FK" ColumnName="Operator_FK" />
                 <ScalarProperty Name="HasilKain" ColumnName="HasilKain" />
                 <ScalarProperty Name="Status_FK" ColumnName="Status_FK" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tm_Recorder">
+            <EntityTypeMapping TypeName="HELLOWModel.tm_Recorder">
+              <MappingFragment StoreEntitySet="tm_Recorder">
+                <ScalarProperty Name="Status_FK" ColumnName="Status_FK" />
+                <ScalarProperty Name="Nama" ColumnName="Nama" />
+                <ScalarProperty Name="NIP" ColumnName="NIP" />
+                <ScalarProperty Name="NoRecorder" ColumnName="NoRecorder" />
+                <ScalarProperty Name="Recorder_PK" ColumnName="Recorder_PK" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

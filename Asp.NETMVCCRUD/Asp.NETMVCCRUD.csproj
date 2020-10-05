@@ -206,6 +206,7 @@
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\KodeWarnaController.cs" />
     <Compile Include="Controllers\MesinController.cs" />
+    <Compile Include="Controllers\RecorderController .cs" />
     <Compile Include="Controllers\OperatorController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\TransaksiController.cs" />
@@ -243,6 +244,9 @@
     <Compile Include="Models\tm_Operator.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tm_Recorder.cs">
+      <DependentUpon>DBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tm_StatusMesin.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
@@ -270,6 +274,8 @@
     <Content Include="Views\TransDetail\MainPage.cshtml" />
     <Content Include="Views\TransDetail\AddOrEdit.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
+    <Content Include="Views\Recorder\AddOrEdit.cshtml" />
+    <Content Include="Views\Recorder\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

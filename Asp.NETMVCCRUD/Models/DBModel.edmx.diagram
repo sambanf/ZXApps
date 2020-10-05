@@ -14,6 +14,7 @@
         <EntityTypeShape EntityType="HELLOWModel.tt_Daily" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="HELLOWModel.tt_Transaction" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="HELLOWModel.tt_TransactionDetail" Width="1.5" PointX="2.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HELLOWModel.tm_Recorder" Width="1.5" PointX="4.75" PointY="6.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -48,7 +48,7 @@
 </div>
 
 @* Modal Add Transaksi *@
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -154,7 +154,9 @@
                             $("#kodewarna").select2({
                                 width: '80%'
                             });
-                            
+                            $("#recorder").select2({
+                                width: '80%'
+                            });
                             $('#daily').val($("#datetrans").val());
                         },
                         error: function (err) {
@@ -239,6 +241,8 @@
                 daily: $("#datetrans").val(),
                 kodewarna: $("#kodewarna").val(),
                 penambahan: $("#penambahan").val(),
+                sheetnum: $("#sheetnum").val(),
+                recorder: $("#recorder").val(),
                 transdetail: transdetails
             });
             var data = { result : res}

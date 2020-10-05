@@ -23,6 +23,14 @@ namespace Asp.NETMVCCRUD.Models
         public string Text { get; set; }
     }
 
+    public class DDLInspector
+    {
+        public int inspectpk { get; set; }
+        public string Text { get; set; }
+    }
+
+
+
     public class DDLOperator
     {
         public int operatorpk { get; set; }
@@ -55,6 +63,8 @@ namespace Asp.NETMVCCRUD.Models
         public int mesin { get; set; }
         public string daily { get; set; } // date
         public int kodewarna { get; set; }
+        public int recorder { get; set; }
+        public string sheetnum { get; set; }
         public double Penambahan { get; set; }
         public List<InputTransaksiDetail> transdetail { get; set; }
     }

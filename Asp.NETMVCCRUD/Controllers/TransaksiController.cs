@@ -20,6 +20,7 @@ namespace Asp.NETMVCCRUD.Controllers
         {
             List<DDLMesin> result = new List<DDLMesin>();
             List<DDLKodeWarna> result2 = new List<DDLKodeWarna>();
+            List<DDLInspector> result3 = new List<DDLInspector>();
             using (HELLOWEntities db = new HELLOWEntities())
             {
                 result = (from mesin in db.tm_Mesin
@@ -42,6 +43,14 @@ namespace Asp.NETMVCCRUD.Controllers
                           }).ToList();  
                 ViewBag.Testlist2 = result2;
 
+                result3 = (from inspect in db.tm_Recorder
+                           where inspect.Status_FK == 1
+                           select new DDLInspector
+                           {
+                               inspectpk = inspect.Recorder_PK,
+                               Text = inspect.Nama + "(" + inspect.NoRecorder + ")"
+                           }).ToList();
+                ViewBag.Testlist3 = result3;
 
                 return PartialView();
             }
@@ -62,6 +71,8 @@ namespace Asp.NETMVCCRUD.Controllers
                 transaction.KodeWarna_FK = input.kodewarna;
                 transaction.Status_FK = 1;
                 transaction.Penambahan = input.Penambahan;
+                transaction.SheetNum = input.sheetnum;
+                transaction.Recorder_FK = input.recorder;
                 db.tt_Transaction.Add(transaction);
                 db.SaveChanges();
 
