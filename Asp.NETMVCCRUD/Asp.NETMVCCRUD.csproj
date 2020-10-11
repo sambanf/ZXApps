@@ -273,9 +273,12 @@
     <Content Include="Views\Mesin\Index.cshtml" />
     <Content Include="Views\TransDetail\MainPage.cshtml" />
     <Content Include="Views\TransDetail\AddOrEdit.cshtml" />
-    <Content Include="Views\Report\Index.cshtml" />
+    <Content Include="Views\Report\DetailWaving.cshtml" />
     <Content Include="Views\Recorder\AddOrEdit.cshtml" />
     <Content Include="Views\Recorder\Index.cshtml" />
+    <Content Include="Views\Report\DetailInspect.cshtml" />
+    <Content Include="Views\Report\Waving.cshtml" />
+    <Content Include="Views\Report\Inspect.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

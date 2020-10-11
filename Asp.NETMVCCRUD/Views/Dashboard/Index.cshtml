@@ -35,9 +35,11 @@
         <thead>
             <tr>
                 <th>No</th>
+                <th>Nomor Kertas</th>
+                <th>Inspect</th>
                 <th>Kode Mesin</th>
-                <th>Status Mesin</th>
                 <th>Warna</th>
+                <th>Hasil Total</th>
                 <th></th>
             </tr>
         </thead>
@@ -93,12 +95,15 @@
                             "type": "GET",
                             "data":data,
                             "datatype": "json"
-                    },
-                    "columns": [
-                        { "data": "Transaction_PK" },
-                        { "data": "KodeMesin" },
-                        { "data": "StatusMesin" },
-                        { "data": "KodeWarna" },
+                        },
+                        "columns": [
+                            { "data": "Transaction_PK" },
+                            { "data": "sheetnum" },
+                            { "data": "recorder" },
+                            { "data": "KodeMesin" },
+                            { "data": "KodeWarna" },
+                            { "data": "total" },
+
                         {
                             "data":"Transaction_PK" , "render" : function (data) {
                             return "<a class='btn btn-default btn-sm' onclick=ChangePage('@Url.Action("MainPage","TransDetail")/" + data + "')><i class='fa fa-info'></i> Details</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i> Delete</a>";
@@ -112,14 +117,16 @@
                     "language": {
 
                     "emptyTable" : "No data found, Please click on <b>Add New</b> Button"
-                    },
+                        },
+                        "pageLength": 20,
                     "columnDefs": [{
                         "searchable": false,
                         "orderable": false,
                         "targets": 0
-                    }],
+                        }],
                     "order": [[1, 'desc']]
                     });
+
                     dataTable.on('order.dt search.dt', function () {
                         dataTable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
                             cell.innerHTML = i + 1;

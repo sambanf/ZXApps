@@ -1,31 +1,18 @@
 ﻿
+<script src="https://cdn.datatables.net/plug-ins/1.10.19/api/sum().js"></script>`
+
 <div class="row">
     <div class="col-md-1">
-        <label>Bulan</label>
+        <label>From</label>
     </div>
     <div class="col-md-4">
-        <select class="form-control dropdown" id="bulan">
-            <option value="1">Januari</option>
-            <option value="2">Februari</option>
-            <option value="3">Maret</option>
-            <option value="4">April</option>
-            <option value="5">Mei</option>
-            <option value="6">Juni</option>
-            <option value="7">Juli</option>
-            <option value="8">Agustus</option>
-            <option value="9">September</option>
-            <option value="10">Oktober</option>
-            <option value="11">November</option>
-            <option value="12">Desember</option>
-        </select>
+        <input id="startdate" type="date" class="form-control" />
     </div>
     <div class="col-md-1">
-        <label>Tahun</label>
+        <label>To</label>
     </div>
     <div class="col-md-4">
-        <select class="form-control dropdown" id="tahun">
-            <option value="2020">2020</option>
-        </select>
+        <input id="enddate" type="date" class="form-control" />
     </div>
 </div>
 <br />
@@ -67,7 +54,7 @@
 
     </div>
     <div class="col-md-2">
-        <label>Total : </label><label id="summary"></label>
+        <label>Total : Rp </label><label id="summary">@ViewBag.Summary</label>
     </div>
 </div>
 
@@ -82,30 +69,34 @@
 
     <script>
         var Popup, dataTable;
+        $(document).ready(function () {
+            $('#startdate').val(new Date().toDateInputValue());
+            $('#enddate').val(new Date().toDateInputValue());
+        });
+
         function searchreport() {
-            var data = { Bulan: $("#bulan").val(), Tahun: $("#tahun").val(), Operator: $("#oper").val() }
+            var data = { startdate: $("#startdate").val(), enddate: $("#enddate").val(), Operator: $("#oper").val() }
             $('#reporttable').DataTable().clear().destroy();
             dataTable = $("#reporttable").DataTable({
                 "ajax": {
                     "url": "/Report/GetData",
                     "type": "GET",
                     "datatype": "json",
-                    "data": data                    
+                    "data": data
                 },
                 "columns": [
                     { "data": "Tanggal" },
                     { "data": "Tanggal" },
                     { "data": "KodeWarna" },
                     { "data": "StatusMesin" },
-                    { "data": "HasilKain" },
-                    { "data": "Pick" },
-                    { "data": "Nilai" },
-                    { "data": "HargaMeter" },
-                    { "data": "Total" },
+                    { "data": "HasilKain", className: "text-right"},
+                    { "data": "Pick", className: "text-right"},
+                    { "data": "Nilai", className: "text-right"},
+                    { "data": "HargaMeter", className: "text-right", render: $.fn.dataTable.render.number(',', '.', 0, 'Rp')  },
+                    { "data": "Total", className: "text-right", render: $.fn.dataTable.render.number(',', '.', 0, 'Rp') },
 
                 ],
                 "language": {
-
                     "emptyTable": "No data found, Please click on <b>Add New</b> Button"
                 },
                 "columnDefs": [{
@@ -120,6 +111,7 @@
                     cell.innerHTML = i + 1;
                 });
             }).draw();
+
             //var sum = $('#reporttable').DataTable().column(9).data().sum()
 
              $.ajax({
@@ -128,83 +120,26 @@
                     data: data,
                     success: function (result) {
                         console.log(result);
-                        $("#summary").html(result.data);
+                        $("#summary").html(addCommas(result.data));
                     },
                     error: function (err) {
                         alert(err);
                     }
                 });
         }
-
-
-
-
-        function PopupForm(url) {
-            var formDiv = $('<div/>');
-            $.get(url)
-            .done(function (response) {
-                formDiv.html(response);
-
-                Popup = formDiv.dialog({
-                    autoOpen: true,
-                    resizable: false,
-                    title: 'Fill KodeWarna Details',
-                    height: 350,
-                    width: 700,
-                    close: function () {
-                        Popup.dialog('destroy').remove();
-                    }
-
-                });
-            });
-        }
-
-        function SubmitForm(form) {
-            $.validator.unobtrusive.parse(form);
-            if($(form).valid()){
-                $.ajax({
-                    type : "POST",
-                    url : form.action,
-                    data : $(form).serialize(),
-                    success : function (data) {
-                        if(data.success)
-                        {
-                            Popup.dialog('close');
-                            dataTable.ajax.reload();
-
-                            $.notify(data.message,{
-                                globalPosition :"top center",
-                                className : "success"
-                            })
-
-                        }
-                    }
-                });
+        function addCommas(nStr) {
+            nStr += '';
+            x = nStr.split('.');
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
             }
-            return false;
+            return x1 + x2;
         }
 
-        function Delete(id) {
-            if(confirm('Are You Sure to Delete this KodeWarna Record ?'))
-            {
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("Delete","KodeWarna")/' + id,
-                    success: function (data) {
-                        if (data.success)
-                        {
-                            dataTable.ajax.reload();
 
-                            $.notify(data.message, {
-                                globalPosition: "top center",
-                                className: "success"
-                            })
 
-                        }
-                    }
-
-                });
-            }
-        }
     </script>
 }

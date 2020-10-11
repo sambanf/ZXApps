@@ -21,19 +21,20 @@ namespace Asp.NETMVCCRUD.Controllers
             {
                 result = (from trans in db.tt_Transaction
                           join mesin in db.tm_Mesin on trans.Mesin_FK equals mesin.Mesin_PK
-                          join statmesin in db.tm_StatusMesin on mesin.StatusMesin_FK equals statmesin.StatusMesin_PK
                           join daily in db.tt_Daily on trans.Daily_FK equals daily.Daily_PK
                           join kodewarna in db.tm_KodeWarna on trans.KodeWarna_FK equals kodewarna.KodeWarna_PK
+                          join record in db.tm_Recorder on trans.Recorder_FK equals record.Recorder_PK
                           where trans.Status_FK == 1 && daily.Date.ToString() == date
                           select new Transaksi
                           {
                               Transaction_PK = trans.Transaction_PK,
                               Mesin_PK = trans.Mesin_FK,
                               KodeMesin = mesin.KodeMesin,
-                              StatusMesin = statmesin.Status,
-                              KodeWarna = kodewarna.KodeWarna
+                              sheetnum = trans.SheetNum,
+                              KodeWarna = kodewarna.KodeWarna, 
+                              recorder = record.Nama, 
+                              total =  db.tt_TransactionDetail.Where(t=>t.Transaction_FK == trans.Transaction_PK).Sum(i => (Double?)i.HasilKain) ?? 0 + (trans.Penambahan.HasValue ? trans.Penambahan.Value : 0.0)
                           }).ToList();
-               
             }
             return Json(new { data = result }, JsonRequestBehavior.AllowGet);
         }
