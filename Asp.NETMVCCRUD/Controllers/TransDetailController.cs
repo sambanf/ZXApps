@@ -106,7 +106,6 @@ namespace Asp.NETMVCCRUD.Controllers
                 if (td.TransactionDetail_PK == 0)
                 {
                     td.Status_FK = 1;
-                    td.KodeWarna_FK = 0;
                     db.tt_TransactionDetail.Add(td);
                     db.SaveChanges();
                     return Json(new { success = true, message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
@@ -114,7 +113,6 @@ namespace Asp.NETMVCCRUD.Controllers
                 else
                 {
                     td.Status_FK = 1;
-                    td.KodeWarna_FK = 0;
                     db.Entry(td).State = EntityState.Modified;
                     db.SaveChanges();
                     return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);

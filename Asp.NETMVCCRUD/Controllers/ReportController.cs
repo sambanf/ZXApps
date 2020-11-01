@@ -44,7 +44,7 @@ namespace Asp.NETMVCCRUD.Controllers
                           join statmesin in db.tm_StatusMesin on mesin.StatusMesin_FK equals statmesin.StatusMesin_PK
                           join daily in db.tt_Daily on t.Daily_FK equals daily.Daily_PK
                           join kodewarna in db.tm_KodeWarna on t.KodeWarna_FK equals kodewarna.KodeWarna_PK
-                          where td.Status_FK == 1 && td.Operator_FK == rp.Operator && daily.Date >= rp.startdate && daily.Date <= rp.enddate
+                          where daily.Status_FK == 1 && t.Status_FK == 1 && td.Status_FK == 1 && td.Operator_FK == rp.Operator && daily.Date >= rp.startdate && daily.Date <= rp.enddate
                           select new ReportList
                           {
                               Tanggal = daily.Date.ToString(),
@@ -76,7 +76,7 @@ namespace Asp.NETMVCCRUD.Controllers
                           join statmesin in db.tm_StatusMesin on mesin.StatusMesin_FK equals statmesin.StatusMesin_PK
                           join daily in db.tt_Daily on t.Daily_FK equals daily.Daily_PK
                           join kodewarna in db.tm_KodeWarna on t.KodeWarna_FK equals kodewarna.KodeWarna_PK
-                          where td.Status_FK == 1 && td.Operator_FK == rp.Operator && daily.Date >= rp.startdate && daily.Date <= rp.enddate
+                          where daily.Status_FK == 1 && t.Status_FK == 1 && td.Status_FK == 1 && td.Operator_FK == rp.Operator && daily.Date >= rp.startdate && daily.Date <= rp.enddate
                           select new ReportList
                           {
                               Tanggal = daily.Date.ToString(),
@@ -122,17 +122,27 @@ namespace Asp.NETMVCCRUD.Controllers
             List<ReportListInspect> result = new List<ReportListInspect>();
             using (HELLOWEntities db = new HELLOWEntities())
             {
-                result = (from t in db.tt_Transaction
+                var res = (from t in db.tt_Transaction
                           join mesin in db.tm_Mesin on t.Mesin_FK equals mesin.Mesin_PK
                           join daily in db.tt_Daily on t.Daily_FK equals daily.Daily_PK
-                          where t.Status_FK == 1 && t.Recorder_FK == rp.Operator && daily.Date >= rp.startdate && daily.Date <= rp.enddate
+                          where daily.Status_FK == 1 && t.Status_FK == 1 && daily.Recorder_FK == rp.Operator && daily.Date >= rp.startdate && daily.Date <= rp.enddate
                           select new ReportListInspect
                           {
                               Tanggal = daily.Date.ToString(),
-                              SheetNum = t.SheetNum,
+                              SheetNum = daily.SheetNum,
                               NoMesin = mesin.KodeMesin.ToString(),
-                              HasilKain = db.tt_TransactionDetail.Where(x => x.Transaction_FK == t.Transaction_PK).Sum(i => (Double?)i.HasilKain) ?? 0 + (t.Penambahan.HasValue ? t.Penambahan.Value : 0.0)
-                          }).ToList();
+                              HasilKain = db.tt_TransactionDetail.Where(x => x.Transaction_FK == t.Transaction_PK).Sum(i => (Double?)i.HasilKain) + (t.Penambahan.HasValue ? t.Penambahan.Value : 0.0) ?? 0
+                          }).GroupBy(l => l.SheetNum)
+                          .Select(cl => new ReportListInspect
+                          {
+                              Tanggal = cl.FirstOrDefault().Tanggal,
+                              SheetNum = cl.FirstOrDefault().SheetNum,
+                              NoMesin = cl.FirstOrDefault().NoMesin,
+                              HasilKain = cl.Sum(x => x.HasilKain),
+                          }).ToList(); ;
+
+                result = res.ToList();
+
                 foreach (var item in result)
                 {
                     item.Total = item.HasilKain * 25;
@@ -146,17 +156,14 @@ namespace Asp.NETMVCCRUD.Controllers
             using (HELLOWEntities db = new HELLOWEntities())
             {
                 result = (from t in db.tt_Transaction
-                          join mesin in db.tm_Mesin on t.Mesin_FK equals mesin.Mesin_PK
-                          join statmesin in db.tm_StatusMesin on mesin.StatusMesin_FK equals statmesin.StatusMesin_PK
                           join daily in db.tt_Daily on t.Daily_FK equals daily.Daily_PK
-                          join kodewarna in db.tm_KodeWarna on t.KodeWarna_FK equals kodewarna.KodeWarna_PK
-                          where t.Status_FK == 1 && t.Recorder_FK == rp.Operator && daily.Date >= rp.startdate && daily.Date <= rp.enddate
+                          where daily.Status_FK == 1 && t.Status_FK == 1 && daily.Recorder_FK == rp.Operator && daily.Date >= rp.startdate && daily.Date <= rp.enddate
                           select new ReportListInspect
                           {
                               Tanggal = daily.Date.ToString(),
-                              SheetNum = kodewarna.KodeWarna,
-                              NoMesin = statmesin.Status,
-                              HasilKain = db.tt_TransactionDetail.Where(x => x.Transaction_FK == t.Transaction_PK).Sum(i => (Double?)i.HasilKain) ?? 0 + (t.Penambahan.HasValue ? t.Penambahan.Value : 0.0)
+                              SheetNum = daily.SheetNum,
+                              NoMesin = t.Mesin_FK.ToString(),
+                              HasilKain = db.tt_TransactionDetail.Where(x => x.Transaction_FK == t.Transaction_PK).Sum(i => (Double?)i.HasilKain) + (t.Penambahan.HasValue ? t.Penambahan.Value : 0.0) ?? 0
                           }).ToList();
                 double summary = 0;
                 foreach (var item in result)
@@ -186,7 +193,7 @@ namespace Asp.NETMVCCRUD.Controllers
                           join daily in db.tt_Daily on t.Daily_FK equals daily.Daily_PK
                           join kodewarna in db.tm_KodeWarna on t.KodeWarna_FK equals kodewarna.KodeWarna_PK
                           join op in db.tm_Operator on td.Operator_FK equals op.Operator_PK
-                          where td.Status_FK == 1 && daily.Date >= rp.startdate && daily.Date <= rp.enddate
+                          where daily.Status_FK == 1 && t.Status_FK == 1 && td.Status_FK == 1 && daily.Date >= rp.startdate && daily.Date <= rp.enddate
                           select new ReportListWaving
                           {
                               NoOperator = op.NoOperator.ToString(),
@@ -220,12 +227,9 @@ namespace Asp.NETMVCCRUD.Controllers
             using (HELLOWEntities db = new HELLOWEntities())
             {
                 result = (from t in db.tt_Transaction
-                          join mesin in db.tm_Mesin on t.Mesin_FK equals mesin.Mesin_PK
-                          join statmesin in db.tm_StatusMesin on mesin.StatusMesin_FK equals statmesin.StatusMesin_PK
                           join daily in db.tt_Daily on t.Daily_FK equals daily.Daily_PK
-                          join kodewarna in db.tm_KodeWarna on t.KodeWarna_FK equals kodewarna.KodeWarna_PK
-                          join rc in db.tm_Recorder on t.Recorder_FK equals rc.Recorder_PK
-                          where t.Status_FK == 1 && daily.Date >= rp.startdate && daily.Date <= rp.enddate
+                          join rc in db.tm_Recorder on daily.Recorder_FK equals rc.Recorder_PK
+                          where daily.Status_FK == 1 && t.Status_FK == 1 && daily.Date >= rp.startdate && daily.Date <= rp.enddate
                           select new ReportListWaving
                           {
                               NoOperator = rc.NoRecorder.ToString(),

@@ -37,8 +37,8 @@
                 <th>No</th>
                 <th>Nomor Kertas</th>
                 <th>Inspect</th>
-                <th>Kode Mesin</th>
-                <th>Warna</th>
+                <th>Hasil Kain</th>
+                <th>Penambahan</th>
                 <th>Hasil Total</th>
                 <th></th>
             </tr>
@@ -82,31 +82,26 @@
         function ondatechange() {
             document.getElementById("mainview").style.display = "block";
             var data = { date: $("#datetrans").val() }
-            $.ajax({
-                url: '@Url.Action("Create", "Dashboard")',
-                type: 'POST',
-                data: data,
-                success: function (result) {
-                    $('#dailypk').val(result.data)
-                    $('#maintable').DataTable().clear().destroy();
-                    dataTable =  $("#maintable").DataTable({
-                    "ajax": {
-                            "url": "/Dashboard/GetData",
-                            "type": "GET",
-                            "data":data,
-                            "datatype": "json"
-                        },
-                        "columns": [
-                            { "data": "Transaction_PK" },
-                            { "data": "sheetnum" },
-                            { "data": "recorder" },
-                            { "data": "KodeMesin" },
-                            { "data": "KodeWarna" },
-                            { "data": "total" },
+
+            $('#maintable').DataTable().clear().destroy();
+            dataTable = $("#maintable").DataTable({
+                "ajax": {
+                    "url": "/Dashboard/GetData",
+                    "type": "GET",
+                    "data": data,
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "Daily_PK" },
+                    { "data": "SheetNum" },
+                            { "data": "Recorder" },
+                            { "data": "HasilKain" },
+                            { "data": "Penambahan" },
+                            { "data": "TotalKain" },
 
                         {
-                            "data":"Transaction_PK" , "render" : function (data) {
-                            return "<a class='btn btn-default btn-sm' onclick=ChangePage('@Url.Action("MainPage","TransDetail")/" + data + "')><i class='fa fa-info'></i> Details</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i> Delete</a>";
+                            "data":"Daily_PK" , "render" : function (data) {
+                            return "<a class='btn btn-default btn-sm' onclick=ChangePage('@Url.Action("MainPage","Transaksi")/" + data + "')><i class='fa fa-info'></i> Details</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i> Delete</a>";
                         },
                             "orderable": false,
                             "searchable":false,
@@ -118,7 +113,6 @@
 
                     "emptyTable" : "No data found, Please click on <b>Add New</b> Button"
                         },
-                        "pageLength": 20,
                     "columnDefs": [{
                         "searchable": false,
                         "orderable": false,
@@ -133,24 +127,18 @@
                         });
                     }).draw();
 
-                },
-                error: function (err) {
-                    alert(err);
-                }
-            });
 
 
-            var d = new Date();
-            var days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-            var hari = days[d.getDay()] + " - " + $("#datetrans").val();
+            //var d = new Date();
+            //var days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+            var hari = "Tanggal : " + $("#datetrans").val();
             $("#dateview").html(hari);
         }
         function btnaddclick() {
-
-                    $.ajax({
-                        url: '@Url.Action("Create","Transaksi")',
+            $.ajax({
+                   url: '@Url.Action("Create","Dashboard")',
                         type: 'get',
-                        data: { x: $("#dailypk").val() },
+                        data: { },
                         success: function (result) {
                             $(".modal-title").html("Tambah Transaksi")
                             $(".modal-body").html(result);
@@ -195,10 +183,10 @@
 
 
         function Delete(id) {
-            if (confirm('Are You Sure to Delete this Transaction Record ?')) {
+            if (confirm('Are You Sure to Delete this Sheet Record ?')) {
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("Delete","Transaksi")/' + id,
+                    url: '@Url.Action("Delete","Dashboard")/' + id,
                     success: function (data) {
                         if (data.success) {
                             dataTable.ajax.reload();
@@ -237,29 +225,24 @@
             }
             return false;
         }
-        function createtrans() {
-            var transdetails = [];
-            $(".transdet").each(function () {
-                var transdet = { nooperator: $(this).find(".operator").val(), hasil: parseFloat($(this).find(".hasil").val())}
-                transdetails.push(transdet);
-            });
-            var res = JSON.stringify({
-                mesin: $("#mesin").val(),
-                daily: $("#datetrans").val(),
-                kodewarna: $("#kodewarna").val(),
-                penambahan: $("#penambahan").val(),
-                sheetnum: $("#sheetnum").val(),
-                recorder: $("#recorder").val(),
-                transdetail: transdetails
-            });
-            var data = { result : res}
-         $.ajax({
-                    url: '@Url.Action("Create", "Transaksi")',
+
+
+         function createdaily() {
+             var data = {
+                 daily: $("#datetrans").val(),
+                 sheetnum: $("#sheetnum").val(),
+                 recorder: $("#recorder").val()
+             }
+                $.ajax({
+                    url: '@Url.Action("CreateDaily", "Dashboard")',
                     type: 'POST',
                     data: data,
                     success: function (result) {
                         if (result.success) {
                             ondatechange();
+                        }
+                        else {
+                            alert(result.message);
                         }
                     },
                     error: function (err) {
@@ -269,32 +252,9 @@
         }
 
 
+
         function ChangePage(x) {
             window.location.href = x;
         }
-
-        function addoperator() {
-            $('#transdetail').append('<br/><div class="row transdet"> <div class= "col-md-offset-2 col-md-4"> <input class="operator form-control" type="number" /> </div > <div class="col-md-4"> <input class="hasil form-control" type="number"  onkeyup="updatejumlah()"  /> </div> <div class="col-md-2"> <input type="button" value="-" class="btn btn-danger" onclick="deleteoperator(this)" /> </div></div >');
-        }
-        //Remove Bgg Go Show
-        function deleteoperator(x) {
-            $(x).closest('.transdet').remove();
-        }
-
-        function updatejumlah() {
-            var jumlah = 0;
-            $(".transdet").each(function () {
-                if ($(this).find(".hasil").val() == '') {
-                    $(this).find(".hasil").val(0);
-                }
-                jumlah = jumlah + parseFloat($(this).find(".hasil").val());
-            });
-            if ($("#penambahan").val() == '') {
-                $("#penambahan").val(0)
-            }
-            jumlah = jumlah + parseFloat($("#penambahan").val());
-            $('#jumlah').val(jumlah);
-        }
-
     </script>
 }

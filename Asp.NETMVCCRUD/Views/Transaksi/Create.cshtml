@@ -9,18 +9,6 @@
         @Html.HiddenFor(model => model.daily)
         <div class="form-group">
             <div class="row">
-                @Html.LabelFor(model => model.kodewarna, "Inspect", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-4">
-                    @Html.ValidationMessageFor(model => model.kodewarna, "", new { @class = "text-danger" })
-                    @Html.DropDownListFor(x => x.recorder, new SelectList(ViewBag.Testlist3, "inspectpk", "Text"), htmlAttributes: new { @class = "col-md-10" })
-                </div>
-                <label class="control-label col-md-2" for="sheetnum">Nomor Kertas</label>
-                <div class="col-md-3">
-                    <input id="sheetnum" type="text" class="form-control" />
-                </div>
-            </div>
-            <br />
-            <div class="row">
                 @Html.LabelFor(model => model.mesin, "Kode Mesin", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @Html.ValidationMessageFor(model => model.mesin, "", new { @class = "text-danger" })

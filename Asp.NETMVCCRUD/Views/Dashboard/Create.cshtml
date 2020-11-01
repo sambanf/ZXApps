@@ -1,0 +1,28 @@
+﻿
+@using (Html.BeginForm("Create", "Transaksi", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+{
+    <div class="form-horizontal">
+        
+        <div class="form-group">
+            <div class="row">
+                <label class="control-label col-md-2" for="sheetnum">Inspect</label>
+                <div class="col-md-4">
+                    @Html.DropDownList("recorder", new SelectList(ViewBag.Testlist3, "inspectpk", "Text"), htmlAttributes: new { @class = "col-md-10" })
+                </div>
+                <label class="control-label col-md-2" for="sheetnum">Nomor Kertas</label>
+                <div class="col-md-3">
+                    <input id="sheetnum" type="text" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            <div class="col-md-offset-10 col-md-2">
+                <input type="button" value="Create" class="btn btn-success" onclick="createdaily()" data-dismiss="modal" />
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+
+</script>

@@ -15,12 +15,11 @@ namespace Asp.NETMVCCRUD.Models
     public partial class tt_Transaction
     {
         public int Transaction_PK { get; set; }
-        public int Daily_FK { get; set; }
+        public Nullable<int> Daily_FK { get; set; }
         public int Mesin_FK { get; set; }
         public int KodeWarna_FK { get; set; }
-        public int Status_FK { get; set; }
         public Nullable<double> Penambahan { get; set; }
-        public int Recorder_FK { get; set; }
-        public string SheetNum { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
+        public int Status_FK { get; set; }
     }
 }

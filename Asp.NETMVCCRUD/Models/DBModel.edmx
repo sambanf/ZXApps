@@ -75,6 +75,8 @@
           </Key>
           <Property Name="Daily_PK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Recorder_FK" Type="int" Nullable="false" />
+          <Property Name="SheetNum" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Status_FK" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="tt_Transaction">
@@ -82,12 +84,11 @@
             <PropertyRef Name="Transaction_PK" />
           </Key>
           <Property Name="Transaction_PK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Daily_FK" Type="int" Nullable="false" />
+          <Property Name="Daily_FK" Type="int" />
           <Property Name="Mesin_FK" Type="int" Nullable="false" />
           <Property Name="KodeWarna_FK" Type="int" Nullable="false" />
-          <Property Name="Recorder_FK" Type="int" Nullable="false" />
-          <Property Name="SheetNum" Type="varchar" MaxLength="10" />
           <Property Name="Penambahan" Type="float" />
+          <Property Name="CreatedDate" Type="datetime" />
           <Property Name="Status_FK" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="tt_TransactionDetail">
@@ -96,7 +97,6 @@
           </Key>
           <Property Name="TransactionDetail_PK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Transaction_FK" Type="int" Nullable="false" />
-          <Property Name="KodeWarna_FK" Type="int" Nullable="false" />
           <Property Name="Operator_FK" Type="int" Nullable="false" />
           <Property Name="HasilKain" Type="float" Nullable="false" />
           <Property Name="Status_FK" Type="int" Nullable="false" />
@@ -178,30 +178,8 @@
           <Property Name="Daily_PK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Status_FK" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="tt_Transaction">
-          <Key>
-            <PropertyRef Name="Transaction_PK" />
-          </Key>
-          <Property Name="Transaction_PK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Daily_FK" Type="Int32" Nullable="false" />
-          <Property Name="Mesin_FK" Type="Int32" Nullable="false" />
-          <Property Name="KodeWarna_FK" Type="Int32" Nullable="false" />
-          <Property Name="Status_FK" Type="Int32" Nullable="false" />
-          <Property Name="Penambahan" Type="Double" />
           <Property Name="Recorder_FK" Type="Int32" Nullable="false" />
-          <Property Name="SheetNum" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="tt_TransactionDetail">
-          <Key>
-            <PropertyRef Name="TransactionDetail_PK" />
-          </Key>
-          <Property Name="TransactionDetail_PK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Transaction_FK" Type="Int32" Nullable="false" />
-          <Property Name="KodeWarna_FK" Type="Int32" Nullable="false" />
-          <Property Name="Operator_FK" Type="Int32" Nullable="false" />
-          <Property Name="HasilKain" Type="Double" Nullable="false" />
-          <Property Name="Status_FK" Type="Int32" Nullable="false" />
+          <Property Name="SheetNum" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityContainer Name="HELLOWEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="am_Status" EntityType="Self.am_Status" />
@@ -211,9 +189,9 @@
           <EntitySet Name="tm_Operator" EntityType="Self.tm_Operator" />
           <EntitySet Name="tm_StatusMesin" EntityType="Self.tm_StatusMesin" />
           <EntitySet Name="tt_Daily" EntityType="Self.tt_Daily" />
-          <EntitySet Name="tt_Transaction" EntityType="Self.tt_Transaction" />
-          <EntitySet Name="tt_TransactionDetail" EntityType="Self.tt_TransactionDetail" />
           <EntitySet Name="tm_Recorder" EntityType="HELLOWModel.tm_Recorder" />
+          <EntitySet Name="tt_TransactionDetail" EntityType="HELLOWModel.tt_TransactionDetail" />
+          <EntitySet Name="tt_Transaction" EntityType="HELLOWModel.tt_Transaction" />
         </EntityContainer>
         <EntityType Name="tm_Recorder">
           <Key>
@@ -223,6 +201,28 @@
           <Property Name="NoRecorder" Type="Int32" Nullable="false" />
           <Property Name="NIP" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Nama" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Status_FK" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tt_TransactionDetail">
+          <Key>
+            <PropertyRef Name="TransactionDetail_PK" />
+          </Key>
+          <Property Name="TransactionDetail_PK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Transaction_FK" Type="Int32" Nullable="false" />
+          <Property Name="Operator_FK" Type="Int32" Nullable="false" />
+          <Property Name="HasilKain" Type="Double" Nullable="false" />
+          <Property Name="Status_FK" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tt_Transaction">
+          <Key>
+            <PropertyRef Name="Transaction_PK" />
+          </Key>
+          <Property Name="Transaction_PK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Daily_FK" Type="Int32" />
+          <Property Name="Mesin_FK" Type="Int32" Nullable="false" />
+          <Property Name="KodeWarna_FK" Type="Int32" Nullable="false" />
+          <Property Name="Penambahan" Type="Double" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="Status_FK" Type="Int32" Nullable="false" />
         </EntityType>
       </Schema>
@@ -294,34 +294,10 @@
           <EntitySetMapping Name="tt_Daily">
             <EntityTypeMapping TypeName="HELLOWModel.tt_Daily">
               <MappingFragment StoreEntitySet="tt_Daily">
-                <ScalarProperty Name="Daily_PK" ColumnName="Daily_PK" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Status_FK" ColumnName="Status_FK" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tt_Transaction">
-            <EntityTypeMapping TypeName="HELLOWModel.tt_Transaction">
-              <MappingFragment StoreEntitySet="tt_Transaction">
                 <ScalarProperty Name="SheetNum" ColumnName="SheetNum" />
                 <ScalarProperty Name="Recorder_FK" ColumnName="Recorder_FK" />
-                <ScalarProperty Name="Penambahan" ColumnName="Penambahan" />
-                <ScalarProperty Name="Transaction_PK" ColumnName="Transaction_PK" />
-                <ScalarProperty Name="Daily_FK" ColumnName="Daily_FK" />
-                <ScalarProperty Name="Mesin_FK" ColumnName="Mesin_FK" />
-                <ScalarProperty Name="KodeWarna_FK" ColumnName="KodeWarna_FK" />
-                <ScalarProperty Name="Status_FK" ColumnName="Status_FK" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tt_TransactionDetail">
-            <EntityTypeMapping TypeName="HELLOWModel.tt_TransactionDetail">
-              <MappingFragment StoreEntitySet="tt_TransactionDetail">
-                <ScalarProperty Name="TransactionDetail_PK" ColumnName="TransactionDetail_PK" />
-                <ScalarProperty Name="Transaction_FK" ColumnName="Transaction_FK" />
-                <ScalarProperty Name="KodeWarna_FK" ColumnName="KodeWarna_FK" />
-                <ScalarProperty Name="Operator_FK" ColumnName="Operator_FK" />
-                <ScalarProperty Name="HasilKain" ColumnName="HasilKain" />
+                <ScalarProperty Name="Daily_PK" ColumnName="Daily_PK" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Status_FK" ColumnName="Status_FK" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -334,6 +310,30 @@
                 <ScalarProperty Name="NIP" ColumnName="NIP" />
                 <ScalarProperty Name="NoRecorder" ColumnName="NoRecorder" />
                 <ScalarProperty Name="Recorder_PK" ColumnName="Recorder_PK" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tt_TransactionDetail">
+            <EntityTypeMapping TypeName="HELLOWModel.tt_TransactionDetail">
+              <MappingFragment StoreEntitySet="tt_TransactionDetail">
+                <ScalarProperty Name="Status_FK" ColumnName="Status_FK" />
+                <ScalarProperty Name="HasilKain" ColumnName="HasilKain" />
+                <ScalarProperty Name="Operator_FK" ColumnName="Operator_FK" />
+                <ScalarProperty Name="Transaction_FK" ColumnName="Transaction_FK" />
+                <ScalarProperty Name="TransactionDetail_PK" ColumnName="TransactionDetail_PK" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tt_Transaction">
+            <EntityTypeMapping TypeName="HELLOWModel.tt_Transaction">
+              <MappingFragment StoreEntitySet="tt_Transaction">
+                <ScalarProperty Name="Status_FK" ColumnName="Status_FK" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Penambahan" ColumnName="Penambahan" />
+                <ScalarProperty Name="KodeWarna_FK" ColumnName="KodeWarna_FK" />
+                <ScalarProperty Name="Mesin_FK" ColumnName="Mesin_FK" />
+                <ScalarProperty Name="Daily_FK" ColumnName="Daily_FK" />
+                <ScalarProperty Name="Transaction_PK" ColumnName="Transaction_PK" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

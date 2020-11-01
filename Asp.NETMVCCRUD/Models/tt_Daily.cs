@@ -17,5 +17,7 @@ namespace Asp.NETMVCCRUD.Models
         public int Daily_PK { get; set; }
         public System.DateTime Date { get; set; }
         public int Status_FK { get; set; }
+        public int Recorder_FK { get; set; }
+        public string SheetNum { get; set; }
     }
 }

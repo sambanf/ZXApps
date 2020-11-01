@@ -32,8 +32,8 @@ namespace Asp.NETMVCCRUD.Models
         public virtual DbSet<tm_Operator> tm_Operator { get; set; }
         public virtual DbSet<tm_StatusMesin> tm_StatusMesin { get; set; }
         public virtual DbSet<tt_Daily> tt_Daily { get; set; }
-        public virtual DbSet<tt_Transaction> tt_Transaction { get; set; }
-        public virtual DbSet<tt_TransactionDetail> tt_TransactionDetail { get; set; }
         public virtual DbSet<tm_Recorder> tm_Recorder { get; set; }
+        public virtual DbSet<tt_TransactionDetail> tt_TransactionDetail { get; set; }
+        public virtual DbSet<tt_Transaction> tt_Transaction { get; set; }
     }
 }

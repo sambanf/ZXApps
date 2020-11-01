@@ -1,0 +1,272 @@
+﻿@model Asp.NETMVCCRUD.Models.Daily
+@{
+    ViewBag.Title = "Transaksi List";
+}
+
+<h2>Transaksi</h2>
+@Html.HiddenFor(model => model.Daily_PK)
+<h5>
+    Inspector : @Html.DisplayFor(model => model.Inspector)
+</h5>
+<h5>
+    Nomor Kertas : @Html.DisplayFor(model => model.SheetNum)
+</h5>
+<button class="btn btn-success" onclick="btnaddclick()">Tambah Transaksi</button>
+
+<table id="OperatorTable" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Order</th>
+            <th>Kode Mesin</th>
+            <th>Kode Warna</th>
+            <th>Hasil Kain</th>
+            <th>Penambahan</th>
+            <th>Sub Total</th>
+            <th></th>
+        </tr>
+    </thead>
+</table>
+
+<button id="backbutton" class="btn btn-danger" onclick='ChangePage("/Dashboard/Index")'><i class='glyphicon glyphicon-arrow-left'></i> Back</button>
+
+<link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+
+@* Modal Add Transaksi *@
+<div class="modal fade bd-example-modal-lg" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Create</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@* Will be moved to single js file later *@
+
+
+@section scripts{
+    <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+
+    <script>
+        var Popup, dataTable;
+        var data = { id: $("#Daily_PK").val() };
+        function datatablereload() {
+            $('#OperatorTable').DataTable().clear().destroy();
+             dataTable =  $("#OperatorTable").DataTable({
+                "ajax": {
+                    "url": "/Transaksi/GetData",
+                    "type": "GET",
+                    "data": data,
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "Transaction_PK"},
+                    { "data": "Transaction_PK", "visible": false},
+                    { "data": "KodeMesin", "orderable": false },
+                    { "data": "KodeWarna", "orderable": false },
+                    { "data": "HasilKain", "orderable": false },
+                    { "data": "Penambahan", "orderable": false },
+                    { "data": "TotalBaris", "orderable": false},
+                    {
+                        "data":"Transaction_PK" , "render" : function (data) {
+                            return "<a class='btn btn-default btn-sm' onclick=ChangePage('@Url.Action("MainPage", "TransDetail")/" + data + "')><i class='fa fa-info'></i> Details</a><a class='btn btn-warning btn-sm' onclick=PopupForm('@Url.Action("Edit","Transaksi")/" + data + "')><i class='fa fa-pencil'></i> Edit</a> <a class='btn btn-danger btn-sm' style = 'margin-left:5px' onclick = Delete("+data+") > <i class='fa fa-trash'></i> Delete</a > ";
+                    },
+                        "orderable": false,
+                        "searchable":false,
+                        "width":"150px"
+                    }
+
+                ],
+                "language": {
+
+                    "emptyTable" : "No data found, Please click on <b>Add New</b> Button"
+                },
+                "order": [[1, 'desc']]
+            });
+            dataTable.on('order.dt search.dt', function () {
+                dataTable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+        }
+        $(document).ready(function () {
+            datatablereload();
+        });
+
+        function PopupForm(url) {
+            var formDiv = $('<div/>');
+            $.get(url)
+            .done(function (response) {
+                formDiv.html(response);
+
+                Popup = formDiv.dialog({
+                    autoOpen: true,
+                    resizable: false,
+                    title: 'Edit Transaction Details',
+                    height: 350,
+                    width: 700,
+                    close: function () {
+                        Popup.dialog('destroy').remove();
+                    }
+
+                });
+            });
+        }
+
+       function btnaddclick() {
+            $.ajax({
+                   url: '@Url.Action("Create","Transaksi")',
+                        type: 'get',
+                        success: function (result) {
+                            $(".modal-title").html("Tambah Transaksi")
+                            $(".modal-body").html(result);
+                            $(".modal").modal("show");
+                            $("#mesin").select2({
+                                width: '80%'
+                            });
+                            $("#kodewarna").select2({
+                                width: '80%'
+                            });
+                            $('#daily').val($("#datetrans").val());
+                        },
+                        error: function (err) {
+                            alert(err);
+                        }
+                    });
+        }
+
+
+        function SubmitForm(form) {
+            $.validator.unobtrusive.parse(form);
+            if($(form).valid()){
+                $.ajax({
+                    type : "POST",
+                    url : form.action,
+                    data : $(form).serialize(),
+                    success: function (data) {
+                      
+                        if(data.success)
+                        {
+                            Popup.dialog('close');
+                            dataTable.ajax.reload();
+
+                            $.notify(data.message,{
+                                globalPosition :"top center",
+                                className : "success"
+                            })
+
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+
+     function Delete(id) {
+            if(confirm('Are You Sure to Delete this Transaction Record ?'))
+            {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete","Transaksi")/' + id,
+                    success: function (data) {
+                        if (data.success)
+                        {
+                            dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+
+                        }
+                    }
+
+                });
+            }
+        }
+
+
+    function formsub() {
+        var data = { Transaction_FK: $("#transfk").val(), Operator_FK: $("#Operator_FK").val(), HasilKain: $("#HasilKain").val(), TransactionDetail_PK: $("#TransactionDetail_PK").val()  }
+         $.ajax({
+                    url: '@Url.Action("AddOrEdit", "Transaksi")',
+                    type: 'POST',
+                    data: data,
+                success: function (result) {
+                 Popup.dialog('close');
+                        datatablereload()
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                });
+        }
+        function ChangePage(x) {
+            window.location.href = x;
+        }
+
+
+
+
+
+        function createtrans() {
+            var transdetails = [];
+            $(".transdet").each(function () {
+                var transdet = { nooperator: $(this).find(".operator").val(), hasil: parseFloat($(this).find(".hasil").val())}
+                transdetails.push(transdet);
+            });
+            var res = JSON.stringify({
+                mesin: $("#mesin").val(),
+                daily: $("#Daily_PK").val(),
+                kodewarna: $("#kodewarna").val(),
+                penambahan: $("#penambahan").val(),
+                transdetail: transdetails
+            });
+            var data = { result : res}
+         $.ajax({
+                    url: '@Url.Action("Create", "Transaksi")',
+                    type: 'POST',
+                    data: data,
+                    success: function (result) {
+                        if (result.success) {
+                            window.location.reload();
+                        }
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                });
+        }
+
+        function updatejumlah() {
+            var jumlah = 0;
+            $(".transdet").each(function () {
+                if ($(this).find(".hasil").val() == '') {
+                    $(this).find(".hasil").val(0);
+                }
+                jumlah = jumlah + parseFloat($(this).find(".hasil").val());
+            });
+            if ($("#penambahan").val() == '') {
+                $("#penambahan").val(0)
+            }
+            jumlah = jumlah + parseFloat($("#penambahan").val());
+            $('#jumlah').val(jumlah);
+        }
+
+        function addoperator() {
+            $('#transdetail').append('<br/><div class="row transdet"> <div class= "col-md-offset-2 col-md-4"> <input class="operator form-control" type="number" /> </div > <div class="col-md-4"> <input class="hasil form-control" type="number"  onkeyup="updatejumlah()"  /> </div> <div class="col-md-2"> <input type="button" value="-" class="btn btn-danger" onclick="deleteoperator(this)" /> </div></div >');
+        }
+
+        function deleteoperator(x) {
+            $(x).closest('.transdet').remove();
+        }
+    </script>
+}
