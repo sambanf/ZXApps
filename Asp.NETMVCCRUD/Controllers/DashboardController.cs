@@ -1,10 +1,15 @@
 ﻿using Asp.NETMVCCRUD.Models;
+using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using Asp.NETMVCCRUD.Class;
 
 namespace Asp.NETMVCCRUD.Controllers
 {
@@ -22,7 +27,7 @@ namespace Asp.NETMVCCRUD.Controllers
             {
                 result = (from daily in db.tt_Daily
                           join record in db.tm_Recorder on daily.Recorder_FK equals record.Recorder_PK
-                          join trans in db.tt_Transaction on  daily.Daily_PK equals trans.Daily_FK into gj
+                          join trans in db.tt_Transaction on daily.Daily_PK equals trans.Daily_FK into gj
                           from subpet in gj.DefaultIfEmpty()
                           where daily.Status_FK == 1 && daily.Date.ToString() == date
                           select new Sheet
@@ -30,9 +35,9 @@ namespace Asp.NETMVCCRUD.Controllers
                               Daily_PK = daily.Daily_PK,
                               SheetNum = daily.SheetNum,
                               Recorder = record.Nama,
-                              HasilKain = db.tt_TransactionDetail.Where(t => t.Transaction_FK == subpet.Transaction_PK && t.Status_FK == 1).Sum(i => (Double?)i.HasilKain) ?? 0,
-                              Penambahan = subpet.Penambahan ?? 0,
-                              TotalKain =  db.tt_TransactionDetail.Where(t=>t.Transaction_FK == subpet.Transaction_PK && t.Status_FK == 1).Sum(i => (Double?)i.HasilKain) + subpet.Penambahan ?? 0
+                              HasilKain = db.tt_TransactionDetail.Where(t => t.Transaction_FK == subpet.Transaction_PK && t.Status_FK == 1 && subpet.Status_FK == 1).Sum(i => (Double?)i.HasilKain) ?? 0,
+                              Penambahan = subpet.Status_FK == 1 ? subpet.Penambahan ?? 0 : 0,
+                              TotalKain = db.tt_TransactionDetail.Where(t => t.Transaction_FK == subpet.Transaction_PK && t.Status_FK == 1 && subpet.Status_FK == 1).Sum(i => (Double?)i.HasilKain) + subpet.Penambahan ?? 0
                           }).GroupBy(l => l.Daily_PK)
                           .Select(cl => new Sheet
                           {
@@ -54,26 +59,6 @@ namespace Asp.NETMVCCRUD.Controllers
             List<DDLInspector> result3 = new List<DDLInspector>();
             using (HELLOWEntities db = new HELLOWEntities())
             {
-                result = (from mesin in db.tm_Mesin
-                          join statmesin in db.tm_StatusMesin on mesin.StatusMesin_FK equals statmesin.StatusMesin_PK
-                          where mesin.Status_FK == 1 && statmesin.Status_FK == 1
-                          select new DDLMesin
-                          {
-                              mesin = mesin.Mesin_PK,
-                              Text = mesin.KodeMesin + " - " + statmesin.Status
-                          }).ToList();
-                //.Where(p=>!db.tt_Transaction.Where(r=>r.Daily_FK == x).Select(q=>q.Mesin_FK).Contains(p.mesin)).ToList();
-                ViewBag.Testlist = result;
-
-                result2 = (from kodewar in db.tm_KodeWarna
-                           where kodewar.Status_FK == 1
-                           select new DDLKodeWarna
-                           {
-                               kodewarna = kodewar.KodeWarna_PK,
-                               Text = kodewar.KodeWarna + "(" + kodewar.Pick + ")"
-                           }).ToList();
-                ViewBag.Testlist2 = result2;
-
                 result3 = (from inspect in db.tm_Recorder
                            where inspect.Status_FK == 1
                            select new DDLInspector
@@ -109,9 +94,9 @@ namespace Asp.NETMVCCRUD.Controllers
             catch (Exception ex)
             {
 
-                return Json(new { success = false, message = "Nomor Kertas Sudah di Input"}, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, message = "Nomor Kertas Sudah di Input" }, JsonRequestBehavior.AllowGet);
             }
-            
+
         }
 
         [HttpPost]
@@ -126,6 +111,97 @@ namespace Asp.NETMVCCRUD.Controllers
                 db.SaveChanges();
                 return Json(new { success = true, message = "Deleted Successfully" }, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        public ActionResult Download(string date)
+        {
+            List<ReportPerMesin> result = new List<ReportPerMesin>();
+            using (HELLOWEntities db = new HELLOWEntities())
+            {
+                result = (from daily in db.tt_Daily
+                          join record in db.tm_Recorder on daily.Recorder_FK equals record.Recorder_PK
+                          join trans in db.tt_Transaction on daily.Daily_PK equals trans.Daily_FK into gj
+                          from subpet in gj.DefaultIfEmpty()
+                          join mesin in db.tm_Mesin on subpet.Mesin_FK equals mesin.Mesin_PK
+                          join kw in db.tm_KodeWarna on subpet.KodeWarna_FK equals kw.KodeWarna_PK
+                          where daily.Status_FK == 1 && daily.Date.ToString() == date
+                          select new ReportPerMesin
+                          {
+                              NoMesin = mesin.KodeMesin,
+                              KodeWarna = kw.KodeWarna,
+                              HasilKain = db.tt_TransactionDetail.Where(t => t.Transaction_FK == subpet.Transaction_PK && t.Status_FK == 1 && subpet.Status_FK == 1).Sum(i => (Double?)i.HasilKain) ?? 0,
+                              Penambahan = subpet.Status_FK == 1 ? subpet.Penambahan ?? 0 : 0,
+                              TotalKain = db.tt_TransactionDetail.Where(t => t.Transaction_FK == subpet.Transaction_PK && t.Status_FK == 1 && subpet.Status_FK == 1).Sum(i => (Double?)i.HasilKain) + subpet.Penambahan ?? 0
+                          }).GroupBy(l => new { 
+                              l.NoMesin,
+                              l.KodeWarna
+                          })
+                          .Select(cl => new ReportPerMesin
+                          {
+                              NoMesin = cl.FirstOrDefault().NoMesin,
+                              KodeWarna = cl.FirstOrDefault().KodeWarna,
+                              HasilKain = cl.Sum(x => x.HasilKain),
+                              Penambahan = cl.Sum(x => x.Penambahan),
+                              TotalKain = cl.Sum(x => x.TotalKain)
+                          }).ToList();
+            }
+
+            XLWorkbook wb = new XLWorkbook();
+            DataTable dt = DataCommonHelper.ConvertListToDataTable(result, string.Empty);
+            wb.Worksheets.Add(dt, "Report");
+            IXLWorksheet ws = wb.Worksheet(1);
+
+            string myName = Server.UrlEncode("ReportPerMesin"+ date +".xlsx");
+            MemoryStream stream = GetStream(wb);// The method is defined below
+            Response.Clear();
+            Response.Buffer = true;
+            Response.AddHeader("content-disposition",
+            "attachment; filename=" + myName);
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.BinaryWrite(stream.ToArray());
+            Response.End();
+            return View();
+        }
+
+        public MemoryStream GetStream(XLWorkbook excelWorkbook)
+        {
+            MemoryStream fs = new MemoryStream();
+            excelWorkbook.SaveAs(fs);
+            fs.Position = 0;
+            return fs;
+        }
+
+        [HttpGet]
+        public ActionResult Edit(int id = 0)
+        {
+            List<DDLInspector> result = new List<DDLInspector>();
+            using (HELLOWEntities db = new HELLOWEntities())
+            {
+                result = (from inspect in db.tm_Recorder
+                           where inspect.Status_FK == 1
+                           select new DDLInspector
+                           {
+                               inspectpk = inspect.Recorder_PK,
+                               Text = inspect.Nama + "(" + inspect.NoRecorder + ")"
+                           }).ToList();
+                ViewBag.Testlist = result;
+
+                return PartialView(db.tt_Daily.Where(x => x.Daily_PK == id).FirstOrDefault<tt_Daily>());
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Edit(tt_Daily td)
+        {
+            using (HELLOWEntities db = new HELLOWEntities())
+            {
+                td.Status_FK = 1;
+                db.Entry(td).State = EntityState.Modified;
+                db.SaveChanges();
+                return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
+            }
+
+
         }
     }
 }

@@ -118,9 +118,9 @@ namespace Asp.NETMVCCRUD.Controllers
                               Transaction_PK = trans.Transaction_PK,
                               KodeMesin = mesin.KodeMesin.ToString(),
                               KodeWarna = kw.KodeWarna,
-                              HasilKain = db.tt_TransactionDetail.Where(t => t.Transaction_FK == trans.Transaction_PK).Sum(i => (Double?)i.HasilKain) ?? 0,
+                              HasilKain = db.tt_TransactionDetail.Where(t => t.Transaction_FK == trans.Transaction_PK && t.Status_FK == 1).Sum(i => (Double?)i.HasilKain) ?? 0,
                               Penambahan = trans.Penambahan ?? 0,
-                              TotalBaris = db.tt_TransactionDetail.Where(t => t.Transaction_FK == trans.Transaction_PK).Sum(i => (Double?)i.HasilKain) + trans.Penambahan ?? 0
+                              TotalBaris = db.tt_TransactionDetail.Where(t => t.Transaction_FK == trans.Transaction_PK && t.Status_FK == 1).Sum(i => (Double?)i.HasilKain) + trans.Penambahan ?? 0
                           }).ToList();
             }
             return Json(new { data = result }, JsonRequestBehavior.AllowGet);

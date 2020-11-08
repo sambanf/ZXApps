@@ -150,6 +150,15 @@ namespace Asp.NETMVCCRUD.Models
         public int Operator { get; set; }
     }
 
+    public class ReportPerMesin
+    {
+        public int NoMesin { get; set; }
+        public string KodeWarna { get; set; }
+        public double HasilKain { get; set; }
+        public double Penambahan { get; set; }
+        public double TotalKain { get; set; }
+    }
+
 
 
 }

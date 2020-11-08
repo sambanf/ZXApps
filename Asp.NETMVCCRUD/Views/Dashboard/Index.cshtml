@@ -20,6 +20,7 @@
         </div>
         <div class="col-md-3">
             <input type="button" class="btn btn-default" onclick="ondatechange()" value="Pilih" />
+            <input type="button" class="btn btn-success" onclick="downloadexcel()" value="Download Excel" />
         </div>
     </div>
 </div>
@@ -101,7 +102,7 @@
 
                         {
                             "data":"Daily_PK" , "render" : function (data) {
-                            return "<a class='btn btn-default btn-sm' onclick=ChangePage('@Url.Action("MainPage","Transaksi")/" + data + "')><i class='fa fa-info'></i> Details</a><a class='btn btn-danger btn-sm' style='margin-left:5px' onclick=Delete("+data+")><i class='fa fa-trash'></i> Delete</a>";
+                            return "<a class='btn btn-default btn-sm' onclick=ChangePage('@Url.Action("MainPage","Transaksi")/" + data + "')><i class='fa fa-info'></i> Details</a><a class='btn btn-warning btn-sm' onclick=PopupForm('@Url.Action("Edit","Dashboard")/" + data + "')><i class='fa fa-pencil'></i> Edit</a> ";
                         },
                             "orderable": false,
                             "searchable":false,
@@ -168,7 +169,7 @@
                     Popup = formDiv.dialog({
                         autoOpen: true,
                         resizable: false,
-                        title: 'Fill Transaction Details',
+                        title: 'Edit Details',
                         height: 350,
                         width: 700,
                         close: function () {
@@ -256,5 +257,10 @@
         function ChangePage(x) {
             window.location.href = x;
         }
+
+        function downloadexcel() {
+            window.open( "@Url.Action("Download","Dashboard")?date=" + $("#datetrans").val());
+        }
+
     </script>
 }
