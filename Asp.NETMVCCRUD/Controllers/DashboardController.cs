@@ -175,6 +175,7 @@ namespace Asp.NETMVCCRUD.Controllers
         public ActionResult Edit(int id = 0)
         {
             List<DDLInspector> result = new List<DDLInspector>();
+            tt_DailyView edited = new tt_DailyView();
             using (HELLOWEntities db = new HELLOWEntities())
             {
                 result = (from inspect in db.tm_Recorder
@@ -186,17 +187,36 @@ namespace Asp.NETMVCCRUD.Controllers
                            }).ToList();
                 ViewBag.Testlist = result;
 
-                return PartialView(db.tt_Daily.Where(x => x.Daily_PK == id).FirstOrDefault<tt_Daily>());
+                edited = (from dail in db.tt_Daily
+                          where dail.Daily_PK == id
+                          select new tt_DailyView
+                          {
+                              Daily_PK = dail.Daily_PK,
+                              Datetemp = dail.Date,
+                              Recorder_FK = dail.Recorder_FK,
+                              SheetNum = dail.SheetNum
+
+                          }).FirstOrDefault();
+
+                edited.Date = edited.Datetemp.ToString("yyyy/MM/dd");
+
+                return PartialView(edited);
             }
         }
 
         [HttpPost]
-        public ActionResult Edit(tt_Daily td)
+        public ActionResult Edit(tt_DailyView td)
         {
+            DateTime temp;
             using (HELLOWEntities db = new HELLOWEntities())
             {
-                td.Status_FK = 1;
-                db.Entry(td).State = EntityState.Modified;
+                tt_Daily dail = db.tt_Daily.Where(x => x.Daily_PK == td.Daily_PK).FirstOrDefault<tt_Daily>();
+                if (DateTime.TryParse(td.Date, out temp))
+                {
+                    dail.Date = temp;
+                    dail.Recorder_FK = td.Recorder_FK;
+                    dail.SheetNum = td.SheetNum;
+                }
                 db.SaveChanges();
                 return Json(new { success = true, message = "Updated Successfully" }, JsonRequestBehavior.AllowGet);
             }

@@ -21,7 +21,7 @@
         
     </div>
     <div class="col-md-4">
-        
+        <input type="button" class="btn btn-success" onclick="downloadexcel()" value="Download Excel" />
     </div>
     <div class="col-md-4">
         <button onclick="searchreport()" class="form-control btn btn-primary">Search</button>
@@ -101,7 +101,7 @@
                     data: data,
                     success: function (result) {
                         console.log(result);
-                        
+
                         $("#summary").html(addCommas(result.data));
                     },
                     error: function (err) {
@@ -121,6 +121,17 @@
             return x1 + x2;
         }
 
+
+        function downloadexcel() {
+            var startdate = $("#startdate").val();
+            var enddate = $("#enddate").val();
+            if (startdate != '' && enddate != '') {
+                window.open("@Url.Action("DownloadInspect","Report")?startdate=" + startdate + "&enddate=" + enddate + "&Operator=0");
+            }
+            else {
+                alert("Tanggal Belum Dipilih")
+            }
+        }
 
 
     </script>

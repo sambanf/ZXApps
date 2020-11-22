@@ -159,6 +159,13 @@ namespace Asp.NETMVCCRUD.Models
         public double TotalKain { get; set; }
     }
 
-
+    public class tt_DailyView
+    {
+        public int Daily_PK { get; set; }
+        public string Date { get; set; }
+        public DateTime Datetemp { get; set; }
+        public int Recorder_FK { get; set; }
+        public string SheetNum { get; set; }
+    }
 
 }
