@@ -26,20 +26,23 @@
         </div>
 
         <div class="row">
-            <div class="col-md-offset-2 col-md-4">
-                <label class="control-label">Operator</label>
+            <div class="col-md-offset-1 col-md-5">
+                <label class="control-label">No Operator</label>
             </div>
             <div class="col-md-4">
                 <label class="control-label">Hasil</label>
             </div>
             <div class="col-md-2">
-                <input type="button" value="+" class="btn btn-warning" onclick="addoperator()"  />
+                <input type="button" value="+" class="btn btn-warning" onclick="addoperator()" />
             </div>
         </div>
         <div id="transdetail">
             <div class="row transdet">
-                <div class="col-md-offset-2 col-md-4">
-                    <input class="operator form-control" type="number" />
+                <div class="col-md-offset-1 col-md-2">
+                    <input class="operator form-control" type="text" onchange="updateoperator(this)" />
+                </div>
+                <div class="col-md-3">
+                    <input class="namaoper form-control" type="text" disabled />
                 </div>
                 <div class="col-md-4">
                     <input class="hasil form-control" type="number" onkeyup="updatejumlah()" />
@@ -58,13 +61,13 @@
                 <label class="control-label">Penambahan(Opt.)</label>
             </div>
             <div class="col-md-2">
-                <input id="penambahan" value="0" class="form-control" type="number" onkeyup="updatejumlah()"/>
+                <input id="penambahan" value="0" class="form-control" type="number" onkeyup="updatejumlah()" />
             </div>
             <div class="col-md-2">
                 <label class="control-label">Jumlah</label>
             </div>
             <div class="col-md-2">
-                <input id="jumlah" class="form-control" type="number" disabled/>
+                <input id="jumlah" class="form-control" type="number" disabled />
             </div>
             <div class="col-md-2">
                 <input type="button" value="Create" class="btn btn-success" onclick="createtrans()" />

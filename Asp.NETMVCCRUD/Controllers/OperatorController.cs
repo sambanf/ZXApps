@@ -75,5 +75,24 @@ namespace Asp.NETMVCCRUD.Controllers
                 return Json(new { success = true, message = "Deleted Successfully" }, JsonRequestBehavior.AllowGet);
             }
         }
+
+
+        public ActionResult Find(string search)
+        {
+            using (HELLOWEntities db = new HELLOWEntities())
+            {
+                try
+                {
+                    string nama = db.tm_Operator.Where(x => x.Status_FK == 1 && x.NoOperator == search).FirstOrDefault().Nama;
+                    return Json(new { data = nama }, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception)
+                {
+
+                    return Json(new { data = "" }, JsonRequestBehavior.AllowGet);
+                }
+                
+            }
+        }
     }
 }

@@ -14,10 +14,19 @@ namespace Asp.NETMVCCRUD.Models
     
     public partial class tm_Recorder
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public tm_Recorder()
+        {
+            this.tt_Daily = new HashSet<tt_Daily>();
+        }
+    
         public int Recorder_PK { get; set; }
         public int NoRecorder { get; set; }
         public string NIP { get; set; }
         public string Nama { get; set; }
         public int Status_FK { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tt_Daily> tt_Daily { get; set; }
     }
 }

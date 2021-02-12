@@ -14,9 +14,18 @@ namespace Asp.NETMVCCRUD.Models
     
     public partial class tm_KodeWarna
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public tm_KodeWarna()
+        {
+            this.tt_Transaction = new HashSet<tt_Transaction>();
+        }
+    
         public int KodeWarna_PK { get; set; }
         public string KodeWarna { get; set; }
         public int Pick { get; set; }
         public int Status_FK { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tt_Transaction> tt_Transaction { get; set; }
     }
 }

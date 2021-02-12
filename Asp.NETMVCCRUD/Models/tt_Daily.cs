@@ -14,10 +14,20 @@ namespace Asp.NETMVCCRUD.Models
     
     public partial class tt_Daily
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public tt_Daily()
+        {
+            this.tt_Transaction = new HashSet<tt_Transaction>();
+        }
+    
         public int Daily_PK { get; set; }
         public System.DateTime Date { get; set; }
-        public int Status_FK { get; set; }
         public int Recorder_FK { get; set; }
         public string SheetNum { get; set; }
+        public int Status_FK { get; set; }
+    
+        public virtual tm_Recorder tm_Recorder { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tt_Transaction> tt_Transaction { get; set; }
     }
 }

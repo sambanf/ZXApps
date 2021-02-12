@@ -5,6 +5,19 @@ using System.Web;
 
 namespace Asp.NETMVCCRUD.Models
 {
+    public class MasterInspectViewModel
+    {
+        public int Recorder_PK { get; set; }
+        public int NoRecorder { get; set; }
+        public string NIP { get; set; }
+        public string Nama { get; set; }
+    }
+    public class MasterKodeWarna
+    {
+        public int KodeWarna_PK { get; set; }
+        public string KodeWarna { get; set; }
+        public int Pick { get; set; }
+    }
     //Drop Down List
     public class DDLMesin
     {
@@ -88,7 +101,7 @@ namespace Asp.NETMVCCRUD.Models
     }
     public class InputTransaksiDetail
     {
-        public int nooperator { get; set; }
+        public string nooperator { get; set; }
         public double hasil { get; set; } // date
     }
 

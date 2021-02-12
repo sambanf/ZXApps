@@ -21,5 +21,9 @@ namespace Asp.NETMVCCRUD.Models
         public Nullable<double> Penambahan { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public int Status_FK { get; set; }
+    
+        public virtual tm_KodeWarna tm_KodeWarna { get; set; }
+        public virtual tm_Mesin tm_Mesin { get; set; }
+        public virtual tt_Daily tt_Daily { get; set; }
     }
 }

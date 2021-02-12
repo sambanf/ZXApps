@@ -22,10 +22,18 @@ namespace Asp.NETMVCCRUD.Controllers
             using (HELLOWEntities db = new HELLOWEntities())
             {
                 List<tm_KodeWarna> empList = db.tm_KodeWarna.Where(x => x.Status_FK == 1).ToList<tm_KodeWarna>();
-                return Json(new { data = empList }, JsonRequestBehavior.AllowGet);
+                List<MasterKodeWarna> result = new List<MasterKodeWarna>();
+                foreach (var item in empList)
+                {
+                    MasterKodeWarna resp = new MasterKodeWarna();
+                    resp.KodeWarna_PK = item.KodeWarna_PK;
+                    resp.KodeWarna = item.KodeWarna;
+                    resp.Pick = item.Pick;
+                    result.Add(resp);
+                }
+                return Json(new { data = result }, JsonRequestBehavior.AllowGet);
             }
         }
-
 
         [HttpGet]
         public ActionResult AddOrEdit(int id = 0)

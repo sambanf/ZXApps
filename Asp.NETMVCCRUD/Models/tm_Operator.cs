@@ -15,7 +15,7 @@ namespace Asp.NETMVCCRUD.Models
     public partial class tm_Operator
     {
         public int Operator_PK { get; set; }
-        public Nullable<int> NoOperator { get; set; }
+        public string NoOperator { get; set; }
         public string NIP { get; set; }
         public string Nama { get; set; }
         public int Status_FK { get; set; }

@@ -69,7 +69,7 @@ namespace Asp.NETMVCCRUD.Controllers
                 {
                     tt_TransactionDetail tdet = new tt_TransactionDetail();
                     tdet.Transaction_FK = transaction.Transaction_PK;
-                    tdet.Operator_FK = item.nooperator;
+                    tdet.Operator_FK = db.tm_Operator.Where(x => x.NoOperator == item.nooperator).FirstOrDefault().Operator_PK;
                     tdet.HasilKain = item.hasil;
                     tdet.Status_FK = 1;
                     db.tt_TransactionDetail.Add(tdet);

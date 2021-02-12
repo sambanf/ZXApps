@@ -22,7 +22,17 @@ namespace Asp.NETMVCCRUD.Controllers
             using (HELLOWEntities db = new HELLOWEntities())
             {
                 List<tm_Recorder> empList = db.tm_Recorder.Where(x => x.Status_FK == 1).ToList<tm_Recorder>();
-                return Json(new { data = empList }, JsonRequestBehavior.AllowGet);
+                List<MasterInspectViewModel> result = new List<MasterInspectViewModel>();
+                foreach (var item in empList)
+                {
+                    MasterInspectViewModel resp = new MasterInspectViewModel();
+                    resp.Recorder_PK = item.Recorder_PK;
+                    resp.NoRecorder = item.NoRecorder;
+                    resp.Nama = item.Nama;
+                    resp.NIP = item.NIP;
+                    result.Add(resp);
+                }
+                return Json(new { data = result }, JsonRequestBehavior.AllowGet);
             }
         }
 

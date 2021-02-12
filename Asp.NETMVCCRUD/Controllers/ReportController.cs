@@ -238,7 +238,7 @@ namespace Asp.NETMVCCRUD.Controllers
                               NoOperator = rc.NoRecorder.ToString(),
                               NIP = rc.NIP,
                               Nama = rc.Nama,
-                              HasilKain = db.tt_TransactionDetail.Where(x => x.Transaction_FK == t.Transaction_PK).Sum(i => (Double?)i.HasilKain) ?? 0 + (t.Penambahan.HasValue ? t.Penambahan.Value : 0.0)
+                              HasilKain = db.tt_TransactionDetail.Where(x => x.Transaction_FK == t.Transaction_PK).Sum(i => ((Double?)i.HasilKain) ?? 0) + (t.Penambahan ?? 0.0)
                           }).GroupBy(l => l.NoOperator)
                           .Select(cl => new ReportListWaving
                           {
@@ -277,7 +277,7 @@ namespace Asp.NETMVCCRUD.Controllers
                               NoOperator = rc.NoRecorder.ToString(),
                               NIP = rc.NIP,
                               Nama = rc.Nama,
-                              HasilKain = db.tt_TransactionDetail.Where(x => x.Transaction_FK == t.Transaction_PK).Sum(i => (Double?)i.HasilKain) ?? 0 + (t.Penambahan.HasValue ? t.Penambahan.Value : 0.0)
+                              HasilKain = db.tt_TransactionDetail.Where(x => x.Transaction_FK == t.Transaction_PK).Sum(i => ((Double?)i.HasilKain) ?? 0) + (t.Penambahan ?? 0.0)
                           }).GroupBy(l => l.NoOperator)
                           .Select(cl => new ReportListWaving
                           {

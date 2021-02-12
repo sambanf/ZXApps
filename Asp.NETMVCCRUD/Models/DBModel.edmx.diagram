@@ -4,16 +4,21 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="92e4205d87694d1884e8a86b54784075" Name="Diagram1">
-        <EntityTypeShape EntityType="HELLOWModel.am_Status" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HELLOWModel.sysdiagram" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HELLOWModel.tm_KodeWarna" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HELLOWModel.tm_Mesin" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HELLOWModel.tm_Operator" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HELLOWModel.tm_StatusMesin" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HELLOWModel.tm_Recorder" Width="1.5" PointX="4.75" PointY="6.75" />
-        <EntityTypeShape EntityType="HELLOWModel.tt_TransactionDetail" Width="1.875" PointX="0.75" PointY="6.75" />
-        <EntityTypeShape EntityType="HELLOWModel.tt_Transaction" Width="1.5" PointX="7.375" PointY="3.75" />
+      <Diagram DiagramId="0e65edecdd304d1d863addf71248e802" Name="Diagram1">
+        <EntityTypeShape EntityType="HELLOWModel.am_Status" Width="1.5" PointX="5.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HELLOWModel.tm_KodeWarna" Width="1.5" PointX="3" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HELLOWModel.tm_Mesin" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HELLOWModel.tm_Operator" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HELLOWModel.tm_Recorder" Width="1.5" PointX="0.75" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="HELLOWModel.tm_StatusMesin" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HELLOWModel.tt_Daily" Width="1.5" PointX="3" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HELLOWModel.tt_Transaction" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="HELLOWModel.tt_TransactionDetail" Width="1.5" PointX="7.75" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="HELLOWModel.FK_tt_Transaction_tm_KodeWarna" ManuallyRouted="false" />
+        <AssociationConnector Association="HELLOWModel.FK_tm_Mesin_tm_StatusMesin" ManuallyRouted="false" />
+        <AssociationConnector Association="HELLOWModel.FK_tt_Transaction_tm_Mesin" ManuallyRouted="false" />
+        <AssociationConnector Association="HELLOWModel.FK_tt_Daily_tm_Recorder" ManuallyRouted="false" />
+        <AssociationConnector Association="HELLOWModel.FK_tt_Transaction_tt_Daily" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

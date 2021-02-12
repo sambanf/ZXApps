@@ -14,9 +14,19 @@ namespace Asp.NETMVCCRUD.Models
     
     public partial class tm_Mesin
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public tm_Mesin()
+        {
+            this.tt_Transaction = new HashSet<tt_Transaction>();
+        }
+    
         public int Mesin_PK { get; set; }
         public int KodeMesin { get; set; }
         public int StatusMesin_FK { get; set; }
         public int Status_FK { get; set; }
+    
+        public virtual tm_StatusMesin tm_StatusMesin { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tt_Transaction> tt_Transaction { get; set; }
     }
 }

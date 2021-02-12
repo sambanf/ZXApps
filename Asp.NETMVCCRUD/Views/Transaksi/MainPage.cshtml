@@ -269,7 +269,7 @@
                     jumlah = jumlah + parseFloat($(this).find(".hasil").val());
                 }
 
-                
+
             });
             if ($("#penambahan").val() == '') {
                 //$("#penambahan").val(0)
@@ -279,7 +279,7 @@
                 $('#jumlah').val(jumlah);
             }
         }
-           
+
 
         function addoperator() {
             $('#transdetail').append('<br/><div class="row transdet"> <div class= "col-md-offset-2 col-md-4"> <input class="operator form-control" type="number" /> </div > <div class="col-md-4"> <input class="hasil form-control" type="number"  onkeyup="updatejumlah()"  /> </div> <div class="col-md-2"> <input type="button" value="-" class="btn btn-danger" onclick="deleteoperator(this)" /> </div></div >');
@@ -287,6 +287,32 @@
 
         function deleteoperator(x) {
             $(x).closest('.transdet').remove();
+        }
+
+
+        function updateoperator(x) {
+            
+            data = { search: $(x).val() }
+             $.ajax({
+                    url: '@Url.Action("Find", "Operator")',
+                    type: 'GET',
+                    data: data,
+                 success: function (result) {
+                     if (result.data != "") {
+                         console.log(result.data);
+                         $(x).closest('.transdet').find('.namaoper').val(result.data);
+                     }
+                     else {
+                         alert("Not Found");
+                         $(x).closest('.transdet').find('.namaoper').val("");
+                         $(x).val("")
+                     }
+                     
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                });
         }
     </script>
 }
