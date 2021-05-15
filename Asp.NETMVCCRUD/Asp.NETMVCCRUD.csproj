@@ -126,6 +126,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\select2.min.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
@@ -208,6 +209,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\notify.min.js" />
+    <Content Include="Scripts\select2.min.js" />
     <Content Include="Web.config" />
     <Content Include="Scripts\jquery-1.12.4.min.map" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -222,6 +224,7 @@
     <Compile Include="Controllers\MesinController.cs" />
     <Compile Include="Controllers\RecorderController .cs" />
     <Compile Include="Controllers\OperatorController.cs" />
+    <Compile Include="Controllers\ReportAddOnController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\TransaksiController.cs" />
     <Compile Include="Controllers\TransDetailController.cs" />
@@ -296,6 +299,10 @@
     <Content Include="Views\Transaksi\MainPage.cshtml" />
     <Content Include="Views\Transaksi\Edit.cshtml" />
     <Content Include="Views\Dashboard\Edit.cshtml" />
+    <Content Include="Views\ReportAddOn\DetailInspect.cshtml" />
+    <Content Include="Views\ReportAddOn\DetailWaving.cshtml" />
+    <Content Include="Views\ReportAddOn\Inspect.cshtml" />
+    <Content Include="Views\ReportAddOn\Waving.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

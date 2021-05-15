@@ -7,9 +7,9 @@
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <link href="~/Content/select2.min.css" rel="stylesheet" />
     <script src="~/Scripts/bootstrap.min.js"></script>
-
+        
 </head>
 <body>
     @*<div class="navbar navbar-inverse navbar-fixed-top">
@@ -75,8 +75,12 @@
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="~/Report/Inspect">Gaji Inspect</a></li>
                             <li><a href="~/Report/DetailInspect">Gaji Inspect Per Periode Detail</a></li>
+                            <li class="divider"></li>
                             <li><a href="~/Report/Waving">Gaji Waving</a></li>
                             <li><a href="~/Report/DetailWaving">Gaji Waving Per Periode Detail</a></li>
+                            <li class="divider"></li>
+                            <li><a href="~/ReportAddOn/Waving">Report Per Kode Warna</a></li>
+                            <li><a href="~/ReportAddOn/Inspect">Report Per Mesin</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -108,7 +112,7 @@
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
     <script src="~/Scripts/notify.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script src="~/Scripts/select2.min.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>
