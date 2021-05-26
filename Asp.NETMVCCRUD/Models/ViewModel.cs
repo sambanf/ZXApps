@@ -172,6 +172,13 @@ namespace Asp.NETMVCCRUD.Models
         public double TotalKain { get; set; }
     }
 
+    public class ReportAddOnPerMesin
+    {
+        public int NoMesin { get; set; }
+        public double HasilKain { get; set; }
+    }
+
+
     public class ReportPerKodeWarna
     {
         public string KodeWarna { get; set; }

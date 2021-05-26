@@ -150,7 +150,7 @@ namespace Asp.NETMVCCRUD.Controllers
             DataTable dt = DataCommonHelper.ConvertListToDataTable(result, string.Empty);
             wb.Worksheets.Add(dt, "Report");
             IXLWorksheet ws = wb.Worksheet(1);
-
+            ws.Columns().AdjustToContents();
             string myName = Server.UrlEncode("ReportPerMesin"+ date +".xlsx");
             MemoryStream stream = GetStream(wb);// The method is defined below
             Response.Clear();

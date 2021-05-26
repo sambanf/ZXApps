@@ -1,5 +1,5 @@
 ﻿
-
+<h2>Report Per Kode Warna</h2>
 <div class="row">
     <div class="col-md-1">
         <label>From</label>
@@ -20,7 +20,7 @@
 
     </div>
     <div class="col-md-4">
-        @*<input type="button" class="btn btn-success" onclick="downloadexcel()" value="Download Excel" />*@
+        <input type="button" class="btn btn-success" onclick="downloadexcel()" value="Download Excel" />
     </div>
     <div class="col-md-4">
         <button onclick="searchreport()" class="form-control btn btn-primary">Search</button>
@@ -98,7 +98,7 @@
             });
 
 
-        @*function downloadexcel() {
+        function downloadexcel() {
             var startdate = $("#startdate").val();
             var enddate = $("#enddate").val();
             if (startdate != '' && enddate != '') {
@@ -107,7 +107,7 @@
             else {
                 alert("Tanggal Belum Dipilih")
             }
-        }*@
+        }
 
     </script>
 }

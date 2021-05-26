@@ -303,6 +303,7 @@
     <Content Include="Views\ReportAddOn\DetailWaving.cshtml" />
     <Content Include="Views\ReportAddOn\Inspect.cshtml" />
     <Content Include="Views\ReportAddOn\Waving.cshtml" />
+    <Content Include="Views\TransDetail\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

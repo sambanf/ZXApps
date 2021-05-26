@@ -282,8 +282,10 @@
 
 
         function addoperator() {
-            $('#transdetail').append('<br/><div class="row transdet"> <div class= "col-md-offset-2 col-md-4"> <input class="operator form-control" type="number" /> </div > <div class="col-md-4"> <input class="hasil form-control" type="number"  onkeyup="updatejumlah()"  /> </div> <div class="col-md-2"> <input type="button" value="-" class="btn btn-danger" onclick="deleteoperator(this)" /> </div></div >');
+            //$('#transdetail').append('<br/><div class="row transdet"> <div class= "col-md-offset-2 col-md-4"> <input class="operator form-control" type="number" /> </div > <div class="col-md-4"> <input class="hasil form-control" type="number"  onkeyup="updatejumlah()"  /> </div> <div class="col-md-2"> <input type="button" value="-" class="btn btn-danger" onclick="deleteoperator(this)" /> </div></div >');
+            $('#transdetail').append('<div class="row transdet"> <div class="col-md-offset-1 col-md-2"> <input class="operator form-control" type="text" onchange="updateoperator(this)" /> </div> <div class="col-md-3"> <input class="namaoper form-control" type="text" disabled /> </div> <div class="col-md-4"> <input class="hasil form-control" type="number" onkeyup="updatejumlah()" /> </div> <div class="col-md-2"> <input type="button" value="-" class="btn btn-danger" onclick="deleteoperator(this)" /> </div> </div>');
         }
+
 
         function deleteoperator(x) {
             $(x).closest('.transdet').remove();
