@@ -1,0 +1,9 @@
+﻿@model List<ZXWebApps.Models.Daily>
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.Inspector</td>
+        <td>@item.SheetNum</td>
+        <td>@item.InsertDate.ToString("dd MMMM yyyy")</td>
+    </tr>
+}

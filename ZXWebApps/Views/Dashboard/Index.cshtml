@@ -1,0 +1,279 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+}
+
+<link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<h3>Transaksi Terakhir</h3>
+<button class="btn btn-success" onclick="btnaddclick()">Tambah Transaksi</button>
+<div class="LastTransaction">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Inspect</th>
+                <th scope="col">Nomor Kertas</th>
+                <th scope="col">Tanggal Kertas</th>
+            </tr>
+        </thead>
+        <tbody id="lastInsert">
+        </tbody>
+    </table>
+
+</div>
+
+<h3>Detail Transaksi </h3>
+<input type="hidden" id="dailypk" />
+<div class="form-group">
+    <div class="row">
+        <div class="col-md-6">
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <input id="datetrans" type="text" class="form-control datepicker" onchange="ondatechange()" />
+        </div>
+        <div class="col-md-3">
+            <input type="button" class="btn btn-success" onclick="downloadexcel()" value="Download Excel" />
+        </div>
+    </div>
+</div>
+
+<div id="mainview" hidden>
+    <table class="table" id="maintable">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Nomor Kertas</th>
+                <th>Inspect</th>
+                <th>Hasil Kain</th>
+                <th>Penambahan</th>
+                <th>Hasil Total</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="maintablebody">
+        </tbody>
+    </table>
+
+</div>
+
+@* Modal Add Transaksi *@
+<div class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Create</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@section scripts{
+    <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        Date.prototype.toDateInputValue = (function () {
+            var local = new Date(this);
+            local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+            return local.toJSON().slice(0, 10);
+        });
+        $(document).ready(function () {
+            $('#datetrans').val(moment().format('DD MMMM YYYY'));
+
+            $(".datepicker").datepicker({
+                dateFormat: 'd MM yy'
+            });
+
+            ondatechange();
+            refreshLastInsert();
+        });
+        function ondatechange() {
+            document.getElementById("mainview").style.display = "block";
+            var data = { date: $("#datetrans").datepicker('getDate').toJSON() }
+
+            $('#maintable').DataTable().clear().destroy();
+            dataTable = $("#maintable").DataTable({
+                "ajax": {
+                    "url": "/Dashboard/GetData",
+                    "type": "GET",
+                    "data": data,
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "Daily_PK" },
+                    { "data": "SheetNum" },
+                            { "data": "Recorder" },
+                            { "data": "HasilKain" },
+                            { "data": "Penambahan" },
+                            { "data": "TotalKain" },
+
+                        {
+                            "data":"Daily_PK" , "render" : function (data) {
+                            return "<a class='btn btn-default btn-sm' onclick=ChangePage('@Url.Action("MainPage","Transaksi")/" + data + "')><i class='fa fa-info'></i> Details</a><a class='btn btn-warning btn-sm' onclick=PopupForm('@Url.Action("Edit","Dashboard")/" + data + "')><i class='fa fa-pencil'></i> Edit</a> ";
+                        },
+                            "orderable": false,
+                            "searchable":false,
+                            "width":"150px"
+                        }
+
+                    ],
+                    "language": {
+
+                    "emptyTable" : "No data found, Please click on <b>Add New</b> Button"
+                        },
+                    "columnDefs": [{
+                        "searchable": false,
+                        "orderable": false,
+                        "targets": 0
+                        }],
+                    "order": [[1, 'desc']]
+                    });
+
+                    dataTable.on('order.dt search.dt', function () {
+                        dataTable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                            cell.innerHTML = i + 1;
+                        });
+                    }).draw();
+
+
+
+            //var d = new Date();
+            //var days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+            var hari = "Tanggal : " + $("#datetrans").val();
+            $("#dateview").html(hari);
+        }
+        function btnaddclick() {
+            $.ajax({
+                   url: '@Url.Action("Create","Dashboard")',
+                        type: 'get',
+                        data: { },
+                        success: function (result) {
+                            $(".modal-title").html("Tambah Transaksi")
+                            $(".modal-body").html(result);
+                            $(".modal").modal("show");
+                            $("#recorder").select2({
+                                width: '100%'
+                            });
+                            $('#daily').val($("#datetrans").datepicker('getDate').toJSON());
+                        },
+                        error: function (err) {
+                            alert(err);
+                        }
+                    });
+        }
+
+        function PopupForm(url) {
+              $.ajax({
+                   url: url,
+                        type: 'get',
+                        data: { },
+                        success: function (result) {
+                            $(".modal-title").html("Edit Transaksi")
+                            $(".modal-body").html(result);
+                            $(".modal").modal("show");
+                        },
+                        error: function (err) {
+                            alert(err);
+                        }
+                    });
+        }
+
+
+        function Delete(id) {
+            if (confirm('Are You Sure to Delete this Sheet Record ?')) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete","Dashboard")/' + id,
+                    success: function (data) {
+                        if (data.success) {
+                            dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+
+                        }
+                    }
+
+                });
+            }
+        }
+        function SubmitForm(form) {
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            $(".modal").modal("hide");
+                            dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+
+         function createdaily() {
+             var data = {
+                 daily: $("#datecreate").datepicker('getDate').toJSON(),
+                 sheetnum: $("#sheetnum").val(),
+                 recorder: $("#recorder").val()
+             }
+                $.ajax({
+                    url: '@Url.Action("CreateDaily", "Dashboard")',
+                    type: 'POST',
+                    data: data,
+                    success: function (result) {
+                        if (result.success) {
+                            refreshLastInsert();
+                            $("#datetrans").val(moment(data.daily).format('DD MMMM YYYY'));
+                            ondatechange();
+                        }
+                        else {
+                            alert(result.message);
+                        }
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                });
+        }
+
+        function ChangePage(x) {
+            window.location.href = x;
+        }
+
+        function downloadexcel() {
+            window.open("@Url.Action("Download","Dashboard")?date=" + $("#datetrans").datepicker('getDate').toJSON());
+        }
+
+        function refreshLastInsert() {
+            $.ajax({
+                url: '@Url.Action("LastInsert", "Dashboard")',
+                type: 'get',
+                success: function (result) {
+                    $("#lastInsert").html(result)
+                },
+                error: function (err) {
+                    alert(err);
+                }
+            });
+        }
+    </script>
+}

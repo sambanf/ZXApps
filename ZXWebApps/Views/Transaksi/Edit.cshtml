@@ -1,0 +1,58 @@
+﻿@model ZXWebApps.Models.tt_Transaction
+
+@using (Html.BeginForm("Edit", "Transaksi", FormMethod.Post, new { onsubmit = "return SubmitForm(this)" }))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>Edit Trans</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Transaction_PK)
+    @Html.HiddenFor(model => model.Daily_FK)
+    <div class="form-group">
+        <div class="row">
+            @Html.LabelFor(model => model.Mesin_FK, "Kode Mesin", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.ValidationMessageFor(model => model.Mesin_FK, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(x => x.Mesin_FK, new SelectList(ViewBag.Testlist, "mesin", "Text"))
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            @Html.LabelFor(model => model.KodeWarna_FK, "Kode Warna", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.ValidationMessageFor(model => model.KodeWarna_FK, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(x => x.KodeWarna_FK, new SelectList(ViewBag.Testlist2, "kodewarna", "Text"), htmlAttributes: new { @class = "col-md-10" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Penambahan, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Penambahan, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Penambahan, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+
+<script type="text/javascript">
+    $("#Mesin_FK").select2({
+        width: '80%'
+    });
+    $("#KodeWarna_FK").select2({
+        width: '80%'
+    });
+</script>
