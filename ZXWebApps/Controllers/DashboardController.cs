@@ -38,43 +38,29 @@ namespace ZXWebApps.Controllers
             DateTime selectedDate = Convert.ToDateTime(date);
             using (HELLOWEntities db = new HELLOWEntities())
             {
-                var dailies = (from daily in db.tt_Daily
-                               join record in db.tm_Recorder on daily.Recorder_FK equals record.Recorder_PK
-                               where daily.Status_FK == 1 && DbFunctions.TruncateTime(daily.Date) == selectedDate.Date
-                               select new Daily { Daily_PK = daily.Daily_PK, Inspector = record.Nama, SheetNum = daily.SheetNum }).ToList();
-
-                foreach (var daily in dailies)
-                {
-                    var rowRes = (from trans in db.tt_Transaction
-                                  where trans.Daily_FK == daily.Daily_PK && trans.Status_FK == 1
-                                  select new Sheet
-                                  {
-                                      Daily_PK = daily.Daily_PK,
-                                      SheetNum = daily.SheetNum,
-                                      Recorder = daily.Inspector,
-                                      Penambahan = trans.Penambahan ?? 0,
-                                      HasilKain = db.tt_TransactionDetail.Where(t => t.Transaction_FK == trans.Transaction_PK && t.Status_FK == 1 && t.HasilKain > 0).Sum(i => i.HasilKain)
-                                  }).FirstOrDefault();
-
-                    if (rowRes != null)
-                    {
-                        rowRes.TotalKain = rowRes.HasilKain ?? 0 + rowRes.Penambahan;
-                        //Add to Result
-                        result.Add(rowRes);
-                    }
-                    else
-                    {
-                        result.Add(new Sheet
-                        {
-                            Daily_PK = daily.Daily_PK,
-                            SheetNum = daily.SheetNum,
-                            Recorder = daily.Inspector,
-                            Penambahan = 0,
-                            HasilKain = 0,
-                            TotalKain = 0
-                        });
-                    }
-                }
+                result = (from daily in db.tt_Daily
+                          join record in db.tm_Recorder on daily.Recorder_FK equals record.Recorder_PK
+                          join trans in db.tt_Transaction on daily.Daily_PK equals trans.Daily_FK into gj
+                          from subpet in gj.DefaultIfEmpty()
+                          where daily.Status_FK == 1 && DbFunctions.TruncateTime(daily.Date) == selectedDate.Date
+                          select new Sheet
+                          {
+                              Daily_PK = daily.Daily_PK,
+                              SheetNum = daily.SheetNum,
+                              Recorder = record.Nama,
+                              HasilKain = db.tt_TransactionDetail.Where(t => t.Transaction_FK == subpet.Transaction_PK && t.Status_FK == 1 && subpet.Status_FK == 1).Sum(i => (Double?)i.HasilKain) ?? 0,
+                              Penambahan = subpet.Status_FK == 1 ? subpet.Penambahan ?? 0 : 0,
+                              TotalKain = db.tt_TransactionDetail.Where(t => t.Transaction_FK == subpet.Transaction_PK && t.Status_FK == 1 && subpet.Status_FK == 1).Sum(i => (Double?)i.HasilKain) + subpet.Penambahan ?? 0
+                          }).GroupBy(l => l.Daily_PK)
+                          .Select(cl => new Sheet
+                          {
+                              Daily_PK = cl.FirstOrDefault().Daily_PK,
+                              SheetNum = cl.FirstOrDefault().SheetNum,
+                              Recorder = cl.FirstOrDefault().Recorder,
+                              HasilKain = cl.Sum(x => x.HasilKain),
+                              Penambahan = cl.Sum(x => x.Penambahan),
+                              TotalKain = cl.Sum(x => x.TotalKain)
+                          }).ToList();
             }
             return Json(new { data = result }, JsonRequestBehavior.AllowGet);
         }
